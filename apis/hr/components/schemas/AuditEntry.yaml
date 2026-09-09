@@ -1,0 +1,35 @@
+type: object
+unevaluatedProperties: false
+description: One change recorded against a payroll run.
+properties:
+  occurredAt:
+    type: string
+    format: date-time
+    description: When the change happened.
+  actorId:
+    type: string
+    description: User who made the change.
+    pattern: '^usr_[0-9A-HJKMNP-TV-Z]{26}$'
+    maxLength: 30
+  actorIp:
+    type: string
+    format: ipv4
+    description: Address the change came from.
+  action:
+    type: string
+    description: What changed.
+    enum:
+      - created
+      - adjusted
+      - approved
+      - paid
+  details:
+    type: object
+    description: Action-specific data.
+    unevaluatedProperties:
+      type: string
+      maxLength: 500
+required:
+  - occurredAt
+  - actorId
+  - action
