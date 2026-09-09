@@ -31,6 +31,8 @@ tags:
     description: Ledger accounts and balances.
   - name: Transfers
     description: Movements of funds between accounts.
+  - name: Payouts
+    description: Recurring payouts to external bank accounts.
 paths:
   /accounts:
     $ref: paths/accounts.yaml
@@ -38,6 +40,10 @@ paths:
     $ref: paths/accounts_{accountId}.yaml
   /transfers:
     $ref: paths/transfers.yaml
+  /payout-schedules:
+    $ref: paths/payout-schedules.yaml
+  /payout-schedules/{scheduleId}:
+    $ref: paths/payout-schedules_{scheduleId}.yaml
 components:
   securitySchemes:
     OAuth2:
@@ -53,6 +59,8 @@ components:
             accounts:write: Open and close accounts.
             transfers:read: Read transfers.
             transfers:write: Create transfers.
+            payouts:read: Read payout schedules.
+            payouts:write: Create and change payout schedules.
         clientCredentials:
           tokenUrl: https://auth.example.com/oauth2/token
           refreshUrl: https://auth.example.com/oauth2/token
@@ -61,4 +69,6 @@ components:
             accounts:write: Open and close accounts.
             transfers:read: Read transfers.
             transfers:write: Create transfers.
+            payouts:read: Read payout schedules.
+            payouts:write: Create and change payout schedules.
 

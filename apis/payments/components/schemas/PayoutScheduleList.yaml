@@ -1,0 +1,15 @@
+type: object
+unevaluatedProperties: false
+description: A page of payout schedules.
+properties:
+  items:
+    type: array
+    description: Items on this page.
+    maxItems: 100
+    items:
+      $ref: ./PayoutSchedule.yaml
+  page:
+    $ref: ./Page.yaml
+required:
+  - items
+  - page
