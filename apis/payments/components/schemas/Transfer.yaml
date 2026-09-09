@@ -1,0 +1,44 @@
+type: object
+unevaluatedProperties: false
+description: Movement of funds between two accounts.
+properties:
+  id:
+    type: string
+    description: Identifier of the transfer.
+    readOnly: true
+    pattern: '^trf_[0-9A-HJKMNP-TV-Z]{26}$'
+    maxLength: 30
+    
+  sourceAccountId:
+    type: string
+    description: Account debited.
+    pattern: '^acct_[0-9A-HJKMNP-TV-Z]{26}$'
+    maxLength: 31
+  destinationAccountId:
+    type: string
+    description: Account credited.
+    pattern: '^acct_[0-9A-HJKMNP-TV-Z]{26}$'
+    maxLength: 31
+  amount:
+    $ref: ./Money.yaml
+  reference:
+    type: string
+    description: Reference shown on both statements.
+    maxLength: 140
+    
+  status:
+    type: string
+    description: Settlement state.
+    enum:
+      - pending
+      - settled
+      - reversed
+    readOnly: true
+allOf:
+  - $ref: ./Timestamps.yaml
+required:
+  - id
+  - sourceAccountId
+  - destinationAccountId
+  - amount
+  - status

@@ -10,3 +10,9 @@ extends:
 
 openapi:
   hideDownloadButtons: false
+  payments@v2:
+    root: apis/payments/openapi.yaml
+  logistics@v4:
+    root: apis/logistics/openapi.yaml
+  hr@v1:
+    root: apis/hr/openapi.yaml

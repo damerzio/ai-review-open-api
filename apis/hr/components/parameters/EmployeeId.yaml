@@ -1,0 +1,8 @@
+name: employeeId
+in: path
+required: true
+description: Identifier of the employee.
+schema:
+  type: string
+  pattern: '^emp_[0-9A-HJKMNP-TV-Z]{26}$'
+  maxLength: 30

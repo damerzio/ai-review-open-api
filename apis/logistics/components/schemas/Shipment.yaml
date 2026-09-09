@@ -1,0 +1,62 @@
+type: object
+unevaluatedProperties: false
+description: A shipment of one or more parcels.
+properties:
+  id:
+    type: string
+    description: Identifier of the shipment.
+    readOnly: true
+    pattern: '^shp_[0-9A-HJKMNP-TV-Z]{26}$'
+    maxLength: 30
+    
+  carrier:
+    type: string
+    description: Carrier code.
+    enum:
+      - dhl
+      - ups
+      - fedex
+      - postnl
+  service:
+    type: string
+    description: Service level.
+    enum:
+      - economy
+      - standard
+      - express
+  from:
+    $ref: ./Address.yaml
+  to:
+    $ref: ./Address.yaml
+  parcels:
+    type: array
+    description: Parcels in the shipment.
+    minItems: 1
+    maxItems: 20
+    items:
+      $ref: ./Parcel.yaml
+  trackingNumber:
+    type: string
+    description: Carrier tracking number.
+    readOnly: true
+    maxLength: 40
+    pattern: '^[A-Z0-9]+$'
+  status:
+    type: string
+    description: Latest known state.
+    readOnly: true
+    enum:
+      - created
+      - in_transit
+      - delivered
+      - exception
+allOf:
+  - $ref: ./Timestamps.yaml
+required:
+  - id
+  - carrier
+  - service
+  - from
+  - to
+  - parcels
+  - status

@@ -1,0 +1,60 @@
+openapi: 3.1.0
+info:
+  title: Shipping API
+  version: 4.1.0
+  summary: Book shipments and follow parcels across carriers.
+  description: |
+    The Shipping API books shipments with connected carriers, returns labels and tracking
+    numbers, and exposes carrier scan events.
+
+    Every operation requires an OAuth 2 access token with the scope named on the operation.
+    Responses are paginated with an opaque cursor and carry `RateLimit-*` headers.
+  contact:
+    name: API team
+    email: api@example.com
+    url: https://developers.example.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+  - url: https://shipping.example.com/v4
+    description: Production.
+    x-internal: false
+  - url: https://shipping.sandbox.example.com/v4
+    description: Sandbox; carriers are simulated.
+    x-internal: false
+security:
+  - OAuth2:
+      - shipments:read
+tags:
+  - name: Shipments
+    description: Booking and cancelling shipments.
+  - name: Tracking
+    description: Carrier scan events.
+paths:
+  /shipments:
+    $ref: paths/shipments.yaml
+  /shipments/{shipmentId}:
+    $ref: paths/shipments_{shipmentId}.yaml
+  /shipments/{shipmentId}/events:
+    $ref: paths/shipments_{shipmentId}_events.yaml
+components:
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: OAuth 2 with short-lived access tokens.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.example.com/oauth2/authorize
+          tokenUrl: https://auth.example.com/oauth2/token
+          refreshUrl: https://auth.example.com/oauth2/token
+          scopes:
+            shipments:read: Read shipments and tracking.
+            shipments:write: Book and cancel shipments.
+        clientCredentials:
+          tokenUrl: https://auth.example.com/oauth2/token
+          refreshUrl: https://auth.example.com/oauth2/token
+          scopes:
+            shipments:read: Read shipments and tracking.
+            shipments:write: Book and cancel shipments.
+

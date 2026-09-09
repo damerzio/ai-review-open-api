@@ -1,0 +1,25 @@
+type: object
+unevaluatedProperties: false
+description: Error envelope returned by every non-2xx response.
+properties:
+  type:
+    type: string
+    description: Stable error code.
+    maxLength: 64
+    pattern: '^[a-z_]+$'
+  title:
+    type: string
+    description: Short human-readable summary.
+    maxLength: 200
+  detail:
+    type: string
+    description: Explanation specific to this occurrence.
+    maxLength: 2000
+  requestId:
+    type: string
+    description: Correlation id of the failed request.
+    maxLength: 64
+    pattern: '^[A-Za-z0-9-]+$'
+required:
+  - type
+  - title

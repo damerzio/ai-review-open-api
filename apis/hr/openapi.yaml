@@ -1,0 +1,65 @@
+openapi: 3.1.0
+info:
+  title: People API
+  version: 1.8.0
+  summary: Employees and payroll for the Example HR platform.
+  description: |
+    The People API exposes employee records and payroll runs to HR tooling.
+
+    Every operation requires an OAuth 2 access token with the scope named on the operation.
+    Responses are paginated with an opaque cursor and carry `RateLimit-*` headers.
+  contact:
+    name: API team
+    email: api@example.com
+    url: https://developers.example.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+  - url: https://people.example.com/v1
+    description: Production.
+    x-internal: false
+  - url: https://people.sandbox.example.com/v1
+    description: Sandbox with anonymised data.
+    x-internal: false
+security:
+  - OAuth2:
+      - hr:read
+tags:
+  - name: Employees
+    description: Employee records.
+  - name: Payroll
+    description: Payroll runs and payslips.
+paths:
+  /employees:
+    $ref: paths/employees.yaml
+  /employees/{employeeId}:
+    $ref: paths/employees_{employeeId}.yaml
+  /payroll-runs:
+    $ref: paths/payroll-runs.yaml
+  /payroll-runs/{payrollRunId}/payslips:
+    $ref: paths/payroll-runs_{payrollRunId}_payslips.yaml
+components:
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: OAuth 2 with short-lived access tokens.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.example.com/oauth2/authorize
+          tokenUrl: https://auth.example.com/oauth2/token
+          refreshUrl: https://auth.example.com/oauth2/token
+          scopes:
+            hr:read: Read employee records.
+            hr:write: Maintain employee records.
+            payroll:read: Read payroll runs and payslips.
+            payroll:admin: Approve and pay payroll runs.
+        clientCredentials:
+          tokenUrl: https://auth.example.com/oauth2/token
+          refreshUrl: https://auth.example.com/oauth2/token
+          scopes:
+            hr:read: Read employee records.
+            hr:write: Maintain employee records.
+            payroll:read: Read payroll runs and payslips.
+            payroll:admin: Approve and pay payroll runs.
+

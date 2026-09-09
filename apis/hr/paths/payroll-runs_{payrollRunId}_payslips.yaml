@@ -1,0 +1,43 @@
+parameters:
+  - $ref: ../components/parameters/PayrollRunId.yaml
+
+get:
+  operationId: listPayslips
+  summary: List payslips of a run
+  description: Returns the payslips produced by one payroll run.
+  tags:
+    - Payroll
+  security:
+    - OAuth2:
+        - payroll:read
+  parameters:
+    - $ref: ../components/parameters/Cursor.yaml
+    - $ref: ../components/parameters/Limit.yaml
+  responses:
+    '200':
+      description: A page of payslips.
+      headers:
+        RateLimit-Limit:
+          $ref: ../components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/PayslipList.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../components/responses/NotFound.yaml
+    '429':
+      $ref: ../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

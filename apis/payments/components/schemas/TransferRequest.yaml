@@ -1,0 +1,24 @@
+type: object
+unevaluatedProperties: false
+description: Request to move funds between two accounts.
+properties:
+  sourceAccountId:
+    type: string
+    description: Account to debit.
+    pattern: '^acct_[0-9A-HJKMNP-TV-Z]{26}$'
+    maxLength: 31
+  destinationAccountId:
+    type: string
+    description: Account to credit.
+    pattern: '^acct_[0-9A-HJKMNP-TV-Z]{26}$'
+    maxLength: 31
+  amount:
+    $ref: ./Money.yaml
+  reference:
+    type: string
+    description: Reference shown on both statements.
+    maxLength: 140
+required:
+  - sourceAccountId
+  - destinationAccountId
+  - amount

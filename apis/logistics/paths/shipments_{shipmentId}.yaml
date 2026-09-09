@@ -1,0 +1,76 @@
+parameters:
+  - $ref: ../components/parameters/ShipmentId.yaml
+
+get:
+  operationId: getShipment
+  summary: Get a shipment
+  description: Returns one shipment with its latest status.
+  tags:
+    - Shipments
+  security:
+    - OAuth2:
+        - shipments:read
+  responses:
+    '200':
+      description: The shipment.
+      headers:
+        RateLimit-Limit:
+          $ref: ../components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Shipment.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../components/responses/NotFound.yaml
+    '429':
+      $ref: ../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml
+
+delete:
+  operationId: cancelShipment
+  summary: Cancel a shipment
+  description: Cancels a shipment that the carrier has not yet picked up.
+  tags:
+    - Shipments
+  security:
+    - OAuth2:
+        - shipments:write
+  responses:
+    '204':
+      description: The shipment was cancelled.
+      headers:
+        RateLimit-Limit:
+          $ref: ../components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../components/headers/AccessControlAllowOrigin.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../components/responses/NotFound.yaml
+    '409':
+      $ref: ../components/responses/Conflict.yaml
+    '429':
+      $ref: ../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

@@ -1,0 +1,8 @@
+name: Idempotency-Key
+in: header
+required: true
+description: Unique key that makes the request safe to retry.
+schema:
+  type: string
+  format: uuid
+  maxLength: 36

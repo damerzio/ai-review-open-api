@@ -1,0 +1,98 @@
+get:
+  operationId: listAccounts
+  summary: List accounts
+  description: Returns the accounts visible to the caller, newest first.
+  tags:
+    - Accounts
+  security:
+    - OAuth2:
+        - accounts:read
+  parameters:
+    - $ref: ../components/parameters/Cursor.yaml
+    - $ref: ../components/parameters/Limit.yaml
+  responses:
+    '200':
+      description: A page of accounts.
+      headers:
+        RateLimit-Limit:
+          $ref: ../components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/AccountList.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../components/responses/Forbidden.yaml
+    '429':
+      $ref: ../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml
+
+post:
+  operationId: createAccount
+  summary: Open an account
+  description: Opens a new ledger account with a zero balance.
+  tags:
+    - Accounts
+  security:
+    - OAuth2:
+        - accounts:write
+  parameters:
+    - $ref: ../components/parameters/IdempotencyKey.yaml
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          unevaluatedProperties: false
+          properties:
+            name:
+              type: string
+              description: Display name of the account.
+              maxLength: 120
+            currency:
+              type: string
+              description: ISO 4217 currency code.
+              maxLength: 3
+              pattern: '^[A-Z]{3}$'
+          required:
+            - name
+            - currency
+  responses:
+    '201':
+      description: The account was opened.
+      headers:
+        RateLimit-Limit:
+          $ref: ../components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Account.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../components/responses/Forbidden.yaml
+    '409':
+      $ref: ../components/responses/Conflict.yaml
+    '429':
+      $ref: ../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

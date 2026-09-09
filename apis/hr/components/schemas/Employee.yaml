@@ -1,0 +1,58 @@
+type: object
+unevaluatedProperties: false
+description: An employee record.
+properties:
+  id:
+    type: string
+    description: Identifier of the employee.
+    readOnly: true
+    pattern: '^emp_[0-9A-HJKMNP-TV-Z]{26}$'
+    maxLength: 30
+    
+  givenName:
+    type: string
+    description: Given name.
+    maxLength: 80
+  familyName:
+    type: string
+    description: Family name.
+    maxLength: 80
+  workEmail:
+    type: string
+    format: email
+    description: Work e-mail address.
+    maxLength: 254
+  department:
+    type: string
+    description: Department code.
+    maxLength: 32
+    pattern: '^[A-Z0-9_-]+$'
+  jobTitle:
+    type: string
+    description: Job title.
+    maxLength: 120
+  managerId:
+    type: string
+    description: Identifier of the line manager.
+    pattern: '^emp_[0-9A-HJKMNP-TV-Z]{26}$'
+    maxLength: 30
+  startDate:
+    type: string
+    format: date
+    description: First day of employment.
+  status:
+    type: string
+    description: Employment state.
+    enum:
+      - active
+      - on_leave
+      - terminated
+allOf:
+  - $ref: ./Timestamps.yaml
+required:
+  - id
+  - givenName
+  - familyName
+  - workEmail
+  - department
+  - status

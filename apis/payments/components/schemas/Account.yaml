@@ -1,0 +1,38 @@
+type: object
+unevaluatedProperties: false
+description: A ledger account holding a balance in one currency.
+properties:
+  id:
+    type: string
+    description: Identifier of the account.
+    readOnly: true
+    pattern: '^acct_[0-9A-HJKMNP-TV-Z]{26}$'
+    maxLength: 31
+    
+  name:
+    type: string
+    description: Display name of the account.
+    maxLength: 120
+    
+  currency:
+    type: string
+    description: ISO 4217 currency code of the balance.
+    maxLength: 3
+    pattern: '^[A-Z]{3}$'
+  balance:
+    $ref: ./Money.yaml
+  status:
+    type: string
+    description: Lifecycle state.
+    enum:
+      - active
+      - frozen
+      - closed
+allOf:
+  - $ref: ./Timestamps.yaml
+required:
+  - id
+  - name
+  - currency
+  - balance
+  - status

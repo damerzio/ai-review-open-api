@@ -1,0 +1,84 @@
+get:
+  operationId: listTransfers
+  summary: List transfers
+  description: Returns transfers involving the caller's accounts, newest first.
+  tags:
+    - Transfers
+  security:
+    - OAuth2:
+        - transfers:read
+  parameters:
+    - $ref: ../components/parameters/Cursor.yaml
+    - $ref: ../components/parameters/Limit.yaml
+  responses:
+    '200':
+      description: A page of transfers.
+      headers:
+        RateLimit-Limit:
+          $ref: ../components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/TransferList.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../components/responses/Forbidden.yaml
+    '429':
+      $ref: ../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml
+
+post:
+  operationId: createTransfer
+  summary: Create a transfer
+  description: Moves funds between two accounts. Settles asynchronously.
+  tags:
+    - Transfers
+  security:
+    - OAuth2:
+        - transfers:write
+  parameters:
+    - $ref: ../components/parameters/IdempotencyKey.yaml
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/TransferRequest.yaml
+  responses:
+    '202':
+      description: The transfer was accepted for settlement.
+      headers:
+        RateLimit-Limit:
+          $ref: ../components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Transfer.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../components/responses/Forbidden.yaml
+    '409':
+      $ref: ../components/responses/Conflict.yaml
+    '429':
+      $ref: ../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

@@ -1,0 +1,5 @@
+description: Origins allowed to read the response.
+schema:
+  type: string
+  maxLength: 253
+  pattern: '^(\*|https://[a-z0-9.-]+)$'

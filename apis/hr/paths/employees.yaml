@@ -1,0 +1,46 @@
+get:
+  operationId: listEmployees
+  summary: List employees
+  description: Returns employees in the caller's organisation.
+  tags:
+    - Employees
+  security:
+    - OAuth2:
+        - hr:read
+  parameters:
+    - $ref: ../components/parameters/Cursor.yaml
+    - $ref: ../components/parameters/Limit.yaml
+    - name: department
+      in: query
+      required: false
+      description: Only employees in this department.
+      schema:
+        type: string
+        maxLength: 32
+        pattern: '^[A-Z0-9_-]+$'
+  responses:
+    '200':
+      description: A page of employees.
+      headers:
+        RateLimit-Limit:
+          $ref: ../components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/EmployeeList.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../components/responses/Forbidden.yaml
+    '429':
+      $ref: ../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

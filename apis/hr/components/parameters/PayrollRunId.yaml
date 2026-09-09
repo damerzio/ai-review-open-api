@@ -1,0 +1,8 @@
+name: payrollRunId
+in: path
+required: true
+description: Identifier of the payroll run.
+schema:
+  type: string
+  pattern: '^pay_[0-9A-HJKMNP-TV-Z]{26}$'
+  maxLength: 30

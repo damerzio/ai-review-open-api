@@ -1,0 +1,36 @@
+type: object
+unevaluatedProperties: false
+description: Request to create a shipment.
+properties:
+  carrier:
+    type: string
+    description: Carrier code.
+    enum:
+      - dhl
+      - ups
+      - fedex
+      - postnl
+  service:
+    type: string
+    description: Service level.
+    enum:
+      - economy
+      - standard
+      - express
+  from:
+    $ref: ./Address.yaml
+  to:
+    $ref: ./Address.yaml
+  parcels:
+    type: array
+    description: Parcels in the shipment.
+    minItems: 1
+    maxItems: 20
+    items:
+      $ref: ./Parcel.yaml
+required:
+  - carrier
+  - service
+  - from
+  - to
+  - parcels

@@ -1,0 +1,39 @@
+type: object
+unevaluatedProperties: false
+description: One payroll cycle.
+properties:
+  id:
+    type: string
+    description: Identifier of the payroll run.
+    readOnly: true
+    pattern: '^pay_[0-9A-HJKMNP-TV-Z]{26}$'
+    maxLength: 30
+    
+  period:
+    type: string
+    description: Pay period in YYYY-MM.
+    maxLength: 7
+    pattern: '^[0-9]{4}-(0[1-9]|1[0-2])$'
+  status:
+    type: string
+    description: Processing state.
+    enum:
+      - draft
+      - approved
+      - paid
+  employeeCount:
+    type: integer
+    format: int32
+    description: Employees included in the run.
+    minimum: 0
+    maximum: 1000000
+  totalGross:
+    $ref: ./Money.yaml
+allOf:
+  - $ref: ./Timestamps.yaml
+required:
+  - id
+  - period
+  - status
+  - employeeCount
+  - totalGross

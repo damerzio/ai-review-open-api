@@ -1,0 +1,14 @@
+type: object
+unevaluatedProperties: false
+description: Cursor pagination.
+properties:
+  nextCursor:
+    type: string
+    description: Cursor for the next page, absent on the last page.
+    maxLength: 256
+    pattern: '^[A-Za-z0-9_-]+$'
+  hasMore:
+    type: boolean
+    description: Whether another page exists.
+required:
+  - hasMore

@@ -1,0 +1,51 @@
+type: object
+unevaluatedProperties: false
+description: An employee's payslip for one period.
+properties:
+  id:
+    type: string
+    description: Identifier of the payslip.
+    readOnly: true
+    pattern: '^slip_[0-9A-HJKMNP-TV-Z]{26}$'
+    maxLength: 31
+    
+  employeeId:
+    type: string
+    description: Employee the payslip belongs to.
+    pattern: '^emp_[0-9A-HJKMNP-TV-Z]{26}$'
+    maxLength: 30
+  period:
+    type: string
+    description: Pay period in YYYY-MM.
+    maxLength: 7
+    pattern: '^[0-9]{4}-(0[1-9]|1[0-2])$'
+  gross:
+    $ref: ./Money.yaml
+  net:
+    $ref: ./Money.yaml
+  deductions:
+    type: array
+    description: Itemised deductions.
+    maxItems: 50
+    items:
+      type: object
+      unevaluatedProperties: false
+      properties:
+        code:
+          type: string
+          description: Deduction code.
+          maxLength: 32
+          pattern: '^[A-Z0-9_]+$'
+        amount:
+          $ref: ./Money.yaml
+      required:
+        - code
+        - amount
+allOf:
+  - $ref: ./Timestamps.yaml
+required:
+  - id
+  - employeeId
+  - period
+  - gross
+  - net

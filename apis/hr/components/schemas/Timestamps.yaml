@@ -1,0 +1,13 @@
+type: object
+description: Creation and modification times.
+properties:
+  createdAt:
+    type: string
+    format: date-time
+    description: When the resource was created.
+    readOnly: true
+  updatedAt:
+    type: string
+    format: date-time
+    description: When the resource was last modified.
+    readOnly: true

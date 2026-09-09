@@ -1,0 +1,28 @@
+type: object
+unevaluatedProperties: false
+description: A scan event reported by the carrier.
+properties:
+  occurredAt:
+    type: string
+    format: date-time
+    description: When the event happened.
+  status:
+    type: string
+    description: Event type.
+    enum:
+      - picked_up
+      - in_transit
+      - out_for_delivery
+      - delivered
+      - exception
+  location:
+    type: string
+    description: Facility or city where the event was recorded.
+    maxLength: 120
+  note:
+    type: string
+    description: Carrier remark.
+    maxLength: 500
+required:
+  - occurredAt
+  - status

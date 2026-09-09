@@ -1,0 +1,16 @@
+description: The rate limit for this client is exhausted.
+headers:
+  RateLimit-Limit:
+    $ref: ../headers/RateLimitLimit.yaml
+  RateLimit-Remaining:
+    $ref: ../headers/RateLimitRemaining.yaml
+  RateLimit-Reset:
+    $ref: ../headers/RateLimitReset.yaml
+  Access-Control-Allow-Origin:
+    $ref: ../headers/AccessControlAllowOrigin.yaml
+  Retry-After:
+    $ref: ../headers/RetryAfter.yaml
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/Error.yaml

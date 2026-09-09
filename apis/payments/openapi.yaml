@@ -1,0 +1,64 @@
+openapi: 3.1.0
+info:
+  title: Ledger API
+  version: 2.3.0
+  summary: Accounts and transfers for the Example ledger.
+  description: |
+    The Ledger API exposes accounts, balances and transfers for platform customers.
+
+    All operations require an OAuth 2 access token with the scope named on the operation.
+    Write operations are idempotent through the `Idempotency-Key` header. Responses are
+    paginated with an opaque cursor and carry `RateLimit-*` headers.
+  contact:
+    name: API team
+    email: api@example.com
+    url: https://developers.example.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+  - url: https://ledger.example.com/v2
+    description: Production.
+    x-internal: false
+  - url: https://ledger.sandbox.example.com/v2
+    description: Sandbox with synthetic data.
+    x-internal: false
+security:
+  - OAuth2:
+      - accounts:read
+tags:
+  - name: Accounts
+    description: Ledger accounts and balances.
+  - name: Transfers
+    description: Movements of funds between accounts.
+paths:
+  /accounts:
+    $ref: paths/accounts.yaml
+  /accounts/{accountId}:
+    $ref: paths/accounts_{accountId}.yaml
+  /transfers:
+    $ref: paths/transfers.yaml
+components:
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: OAuth 2 with short-lived access tokens.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.example.com/oauth2/authorize
+          tokenUrl: https://auth.example.com/oauth2/token
+          refreshUrl: https://auth.example.com/oauth2/token
+          scopes:
+            accounts:read: Read accounts and balances.
+            accounts:write: Open and close accounts.
+            transfers:read: Read transfers.
+            transfers:write: Create transfers.
+        clientCredentials:
+          tokenUrl: https://auth.example.com/oauth2/token
+          refreshUrl: https://auth.example.com/oauth2/token
+          scopes:
+            accounts:read: Read accounts and balances.
+            accounts:write: Open and close accounts.
+            transfers:read: Read transfers.
+            transfers:write: Create transfers.
+

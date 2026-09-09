@@ -1,0 +1,15 @@
+type: object
+unevaluatedProperties: false
+description: A page of tracking events.
+properties:
+  items:
+    type: array
+    description: Items on this page.
+    maxItems: 100
+    items:
+      $ref: ./TrackingEvent.yaml
+  page:
+    $ref: ./Page.yaml
+required:
+  - items
+  - page
