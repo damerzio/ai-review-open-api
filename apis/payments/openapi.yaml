@@ -23,6 +23,8 @@ servers:
   - url: https://ledger.sandbox.example.com/v2
     description: Sandbox with synthetic data.
     x-internal: false
+  - url: https://recon.example.com/v2
+    description: Reconciliation exports for finance partners.
 security:
   - OAuth2:
       - accounts:read
@@ -31,6 +33,8 @@ tags:
     description: Ledger accounts and balances.
   - name: Transfers
     description: Movements of funds between accounts.
+  - name: Reconciliation
+    description: Exports for finance partners.
 paths:
   /accounts:
     $ref: paths/accounts.yaml
@@ -38,8 +42,19 @@ paths:
     $ref: paths/accounts_{accountId}.yaml
   /transfers:
     $ref: paths/transfers.yaml
+  /reconciliation/transfers:
+    $ref: paths/reconciliation_transfers.yaml
 components:
   securitySchemes:
+    PartnerKey:
+      type: apiKey
+      in: query
+      name: partner_key
+      description: Key issued to a finance partner.
+    FinanceBasic:
+      type: http
+      scheme: basic
+      description: Finance team account.
     OAuth2:
       type: oauth2
       description: OAuth 2 with short-lived access tokens.
