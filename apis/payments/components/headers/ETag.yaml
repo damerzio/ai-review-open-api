@@ -1,0 +1,5 @@
+description: Version of the resource, for conditional requests.
+schema:
+  type: string
+  maxLength: 64
+  pattern: '^"[A-Za-z0-9+/=_-]+"$'

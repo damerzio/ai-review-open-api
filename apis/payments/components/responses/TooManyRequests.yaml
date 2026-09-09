@@ -11,6 +11,6 @@ headers:
   Retry-After:
     $ref: ../headers/RetryAfter.yaml
 content:
-  application/json:
+  application/problem+json:
     schema:
-      $ref: ../schemas/Error.yaml
+      $ref: ../schemas/ProblemDetails.yaml
