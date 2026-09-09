@@ -1,0 +1,42 @@
+type: object
+additionalProperties: false
+description: How much of one stock keeping unit is held in one warehouse.
+properties:
+  sku:
+    type: string
+    description: Stock keeping unit, shared with the Storefront API.
+    maxLength: 32
+    pattern: '^[A-Z0-9-]{4,32}$'
+  warehouseCode:
+    type: string
+    description: Code of the warehouse holding the stock.
+    maxLength: 8
+    pattern: '^[A-Z]{2,8}$'
+  onHand:
+    type: integer
+    format: int32
+    description: Units physically present in the warehouse.
+    minimum: 0
+    maximum: 1000000
+  reserved:
+    type: integer
+    format: int32
+    description: Units already promised to open orders.
+    minimum: 0
+    maximum: 1000000
+  reorderPoint:
+    type: integer
+    format: int32
+    description: Level at which replenishment is triggered.
+    minimum: 0
+    maximum: 1000000
+  updatedAt:
+    type: string
+    description: Time the stock level was last recalculated.
+    format: date-time
+    maxLength: 40
+    readOnly: true
+required:
+  - sku
+  - warehouseCode
+  - onHand

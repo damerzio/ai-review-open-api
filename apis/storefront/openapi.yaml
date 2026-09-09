@@ -1,0 +1,81 @@
+openapi: 3.1.0
+info:
+  title: Storefront API
+  version: 1.4.0
+  summary: Public catalog, cart and checkout API for the Example Shop storefront.
+  description: |
+    The Storefront API powers the customer-facing shop: browsing the published catalog,
+    building a cart and placing an order.
+
+    Every operation is protected by OAuth 2 and scoped to the smallest set of permissions
+    that the operation needs. The only exception is the token endpoint itself.
+
+    Responses are paginated with an opaque cursor. Rate limits are advertised on every
+    response through the `RateLimit-*` headers.
+  contact:
+    name: Example Shop API team
+    email: api@shop.example.com
+    url: https://developers.shop.example.com/support
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  termsOfService: https://shop.example.com/terms
+servers:
+  - url: https://api.shop.example.com/v1
+    description: Production storefront server.
+    x-internal: false
+  - url: https://sandbox.api.shop.example.com/v1
+    description: Sandbox server, seeded with test data and safe for integration testing.
+    x-internal: false
+security:
+  - OAuth2:
+      - catalog:read
+tags:
+  - name: Catalog
+    description: Browse and manage the published product catalog.
+  - name: Carts
+    description: Build a cart before checkout.
+  - name: Orders
+    description: Place and inspect customer orders.
+  - name: Authorization
+    description: Obtain an access token for the Storefront API.
+paths:
+  /products:
+    $ref: paths/products.yaml
+  /products/{productId}:
+    $ref: paths/products_{productId}.yaml
+  /carts:
+    $ref: paths/carts.yaml
+  /carts/{cartId}/items:
+    $ref: paths/carts_{cartId}_items.yaml
+  /orders:
+    $ref: paths/orders.yaml
+  /orders/{orderId}:
+    $ref: paths/orders_{orderId}.yaml
+  /oauth2/token:
+    $ref: paths/oauth2_token.yaml
+components:
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: |
+        OAuth 2 with short-lived access tokens. Use the authorization code flow for
+        storefront sessions and the client credentials flow for server integrations.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api.shop.example.com/oauth2/authorize
+          tokenUrl: https://api.shop.example.com/oauth2/token
+          refreshUrl: https://api.shop.example.com/oauth2/token
+          scopes:
+            catalog:read: Read the published catalog.
+            catalog:write: Create and update catalog entries.
+            carts:write: Create and modify carts.
+            orders:read: Read orders belonging to the authenticated customer.
+            orders:write: Place and cancel orders.
+        clientCredentials:
+          tokenUrl: https://api.shop.example.com/oauth2/token
+          refreshUrl: https://api.shop.example.com/oauth2/token
+          scopes:
+            catalog:read: Read the published catalog.
+            catalog:write: Create and update catalog entries.
+            orders:read: Read every order in the store.

@@ -1,0 +1,100 @@
+parameters:
+  - name: sku
+    in: path
+    required: true
+    description: Stock keeping unit to inspect.
+    schema:
+      type: string
+      maxLength: 32
+      pattern: '^[A-Z0-9-]{4,32}$'
+
+get:
+  operationId: getStockItem
+  summary: Retrieve stock for one unit
+  description: Returns the stock level of one stock keeping unit in one warehouse.
+  tags:
+    - Stock
+  security:
+    - ServiceApiKey: []
+  parameters:
+    - name: warehouseCode
+      in: query
+      required: true
+      description: Warehouse to read the level from.
+      schema:
+        type: string
+        maxLength: 8
+        pattern: '^[A-Z]{2,8}$'
+  responses:
+    '200':
+      description: The requested stock level.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../../shared/components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../../shared/components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/StockItem.yaml
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../shared/components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../shared/components/responses/NotFound.yaml
+    '429':
+      $ref: ../../shared/components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../shared/components/responses/InternalServerError.yaml
+
+put:
+  operationId: replaceStockItem
+  summary: Replace stock for one unit
+  description: |
+    Overwrites the stock level of one stock keeping unit in one warehouse. Use it after a
+    full stock count; record an adjustment instead when correcting a known delta.
+  tags:
+    - Stock
+  security:
+    - ServiceApiKey: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/StockItem.yaml
+  responses:
+    '200':
+      description: The stock level after the replacement.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../../shared/components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../../shared/components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/StockItem.yaml
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../shared/components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../shared/components/responses/NotFound.yaml
+    '429':
+      $ref: ../../shared/components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../shared/components/responses/InternalServerError.yaml

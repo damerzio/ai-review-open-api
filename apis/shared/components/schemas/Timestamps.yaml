@@ -1,0 +1,16 @@
+type: object
+additionalProperties: false
+description: Creation and update timestamps maintained by the server.
+properties:
+  createdAt:
+    type: string
+    description: Time at which the resource was created.
+    format: date-time
+    maxLength: 40
+    readOnly: true
+  updatedAt:
+    type: string
+    description: Time at which the resource was last modified.
+    format: date-time
+    maxLength: 40
+    readOnly: true

@@ -1,0 +1,90 @@
+get:
+  operationId: listProducts
+  summary: List products
+  description: |
+    Returns one page of the published catalog, newest first. Unpublished products are
+    omitted unless the caller holds the `catalog:write` scope.
+  tags:
+    - Catalog
+  security:
+    - OAuth2:
+        - catalog:read
+  parameters:
+    - $ref: ../../shared/components/parameters/Cursor.yaml
+    - $ref: ../../shared/components/parameters/Limit.yaml
+    - name: category
+      in: query
+      required: false
+      description: Restrict the page to a single category slug.
+      schema:
+        type: string
+        maxLength: 64
+        pattern: '^[a-z0-9-]+$'
+  responses:
+    '200':
+      description: One page of catalog entries.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../../shared/components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../../shared/components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ProductList.yaml
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '429':
+      $ref: ../../shared/components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../shared/components/responses/InternalServerError.yaml
+
+post:
+  operationId: createProduct
+  summary: Create a product
+  description: |
+    Adds a product to the catalog. The product stays unpublished until `published` is set
+    to true, so a half-finished entry is never visible in the storefront.
+  tags:
+    - Catalog
+  security:
+    - OAuth2:
+        - catalog:write
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/Product.yaml
+  responses:
+    '201':
+      description: The product was created.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../../shared/components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../../shared/components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Product.yaml
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '409':
+      $ref: ../../shared/components/responses/Conflict.yaml
+    '429':
+      $ref: ../../shared/components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../shared/components/responses/InternalServerError.yaml

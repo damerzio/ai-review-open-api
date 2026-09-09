@@ -1,0 +1,7 @@
+description: Requests still available in the current window.
+required: false
+schema:
+  type: integer
+  format: int32
+  minimum: 0
+  maximum: 100000

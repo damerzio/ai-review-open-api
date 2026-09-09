@@ -1,0 +1,29 @@
+type: object
+additionalProperties: false
+description: A cart being built by a customer before checkout.
+allOf:
+  - $ref: ../../../shared/components/schemas/Timestamps.yaml
+  - type: object
+    additionalProperties: false
+    properties:
+      id:
+        type: string
+        description: Identifier of the cart.
+        format: uuid
+        maxLength: 36
+        readOnly: true
+      currency:
+        type: string
+        description: Currency every line in the cart is priced in.
+        enum: [USD, EUR, GBP, PLN, UAH]
+      items:
+        type: array
+        description: Lines currently in the cart.
+        maxItems: 50
+        items:
+          $ref: ./CartItem.yaml
+      total:
+        $ref: ../../../shared/components/schemas/Money.yaml
+    required:
+      - currency
+      - items

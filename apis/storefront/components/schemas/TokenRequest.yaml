@@ -1,0 +1,25 @@
+type: object
+additionalProperties: false
+description: Request body of the token endpoint.
+properties:
+  grant_type:
+    type: string
+    description: Grant the client is exercising.
+    enum: [authorization_code, client_credentials, refresh_token]
+  code:
+    type: string
+    description: Authorization code, required for the authorization code grant.
+    maxLength: 512
+    pattern: '^[A-Za-z0-9_.-]+$'
+  refresh_token:
+    type: string
+    description: Refresh token, required for the refresh token grant.
+    maxLength: 512
+    pattern: '^[A-Za-z0-9_.-]+$'
+  scope:
+    type: string
+    description: Space-separated list of requested scopes.
+    maxLength: 256
+    pattern: '^[a-z:_ ]+$'
+required:
+  - grant_type

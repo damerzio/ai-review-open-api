@@ -1,0 +1,21 @@
+type: object
+additionalProperties: false
+description: Error payload returned by any operation that fails.
+properties:
+  code:
+    type: string
+    description: Stable machine-readable error code.
+    maxLength: 64
+    pattern: '^[a-z_]+$'
+  message:
+    type: string
+    description: Human-readable explanation of the failure.
+    maxLength: 512
+  requestId:
+    type: string
+    description: Identifier of the request, safe to quote in a support ticket.
+    format: uuid
+    maxLength: 36
+required:
+  - code
+  - message

@@ -1,0 +1,38 @@
+get:
+  operationId: listWarehouses
+  summary: List warehouses
+  description: |
+    Returns every warehouse, active or not. The list is small and changes rarely, so it is
+    not paginated.
+  tags:
+    - Warehouses
+  security:
+    - ServiceApiKey: []
+  responses:
+    '200':
+      description: Every warehouse known to the system.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../../shared/components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../../shared/components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            type: array
+            description: Warehouses, ordered by code.
+            maxItems: 200
+            items:
+              $ref: ../components/schemas/Warehouse.yaml
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../shared/components/responses/Forbidden.yaml
+    '500':
+      $ref: ../../shared/components/responses/InternalServerError.yaml

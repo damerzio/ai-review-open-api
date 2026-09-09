@@ -1,0 +1,31 @@
+type: object
+additionalProperties: false
+description: A postal address used for delivery or billing.
+properties:
+  line1:
+    type: string
+    description: Street address, first line.
+    maxLength: 120
+  line2:
+    type: string
+    description: Street address, second line.
+    maxLength: 120
+  city:
+    type: string
+    description: City or locality.
+    maxLength: 80
+  postalCode:
+    type: string
+    description: Postal or ZIP code.
+    maxLength: 16
+    pattern: '^[A-Za-z0-9 -]{3,16}$'
+  countryCode:
+    type: string
+    description: Two-letter country code.
+    maxLength: 2
+    pattern: '^[A-Z]{2}$'
+required:
+  - line1
+  - city
+  - postalCode
+  - countryCode

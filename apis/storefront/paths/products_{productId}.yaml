@@ -1,0 +1,123 @@
+parameters:
+  - name: productId
+    in: path
+    required: true
+    description: Identifier of the product.
+    schema:
+      type: string
+      format: uuid
+      maxLength: 36
+
+get:
+  operationId: getProduct
+  summary: Retrieve a product
+  description: Returns a single catalog entry, including its current price.
+  tags:
+    - Catalog
+  security:
+    - OAuth2:
+        - catalog:read
+  responses:
+    '200':
+      description: The requested product.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../../shared/components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../../shared/components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Product.yaml
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '404':
+      $ref: ../../shared/components/responses/NotFound.yaml
+    '429':
+      $ref: ../../shared/components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../shared/components/responses/InternalServerError.yaml
+
+patch:
+  operationId: updateProduct
+  summary: Update a product
+  description: |
+    Applies a partial update to a catalog entry. Omitted fields keep their current value;
+    `id`, `createdAt` and `updatedAt` are managed by the server.
+  tags:
+    - Catalog
+  security:
+    - OAuth2:
+        - catalog:write
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/Product.yaml
+  responses:
+    '200':
+      description: The updated product.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../../shared/components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../../shared/components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Product.yaml
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '404':
+      $ref: ../../shared/components/responses/NotFound.yaml
+    '429':
+      $ref: ../../shared/components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../shared/components/responses/InternalServerError.yaml
+
+delete:
+  operationId: deleteProduct
+  summary: Delete a product
+  description: |
+    Removes a catalog entry. Orders that already reference the product keep their own copy
+    of the line, so order history is not rewritten.
+  tags:
+    - Catalog
+  security:
+    - OAuth2:
+        - catalog:write
+  responses:
+    '204':
+      description: The product was deleted.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../../shared/components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../../shared/components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '404':
+      $ref: ../../shared/components/responses/NotFound.yaml
+    '429':
+      $ref: ../../shared/components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../shared/components/responses/InternalServerError.yaml

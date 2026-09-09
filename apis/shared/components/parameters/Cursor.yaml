@@ -1,0 +1,8 @@
+name: cursor
+in: query
+required: false
+description: Cursor returned by a previous page of the same query.
+schema:
+  type: string
+  maxLength: 256
+  pattern: '^[A-Za-z0-9_=-]+$'

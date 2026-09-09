@@ -1,0 +1,15 @@
+type: object
+additionalProperties: false
+description: One page of orders belonging to the authenticated customer.
+properties:
+  page:
+    $ref: ../../../shared/components/schemas/Page.yaml
+  items:
+    type: array
+    description: Orders in this page, newest first.
+    maxItems: 100
+    items:
+      $ref: ./Order.yaml
+required:
+  - page
+  - items

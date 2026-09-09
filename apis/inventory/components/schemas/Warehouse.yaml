@@ -1,0 +1,25 @@
+type: object
+additionalProperties: false
+description: A physical location that holds stock.
+properties:
+  code:
+    type: string
+    description: Short code identifying the warehouse.
+    maxLength: 8
+    pattern: '^[A-Z]{2,8}$'
+  name:
+    type: string
+    description: Display name of the warehouse.
+    maxLength: 120
+  countryCode:
+    type: string
+    description: Country the warehouse operates in.
+    maxLength: 2
+    pattern: '^[A-Z]{2}$'
+  active:
+    type: boolean
+    description: Whether the warehouse currently accepts stock.
+required:
+  - code
+  - name
+  - countryCode

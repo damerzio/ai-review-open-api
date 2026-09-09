@@ -1,0 +1,94 @@
+get:
+  operationId: listSuppliers
+  summary: List suppliers
+  description: Returns one page of suppliers, ordered by name.
+  tags:
+    - Suppliers
+  security:
+    - ServiceApiKey: []
+  parameters:
+    - $ref: ../../shared/components/parameters/Cursor.yaml
+    - $ref: ../../shared/components/parameters/Limit.yaml
+  responses:
+    '200':
+      description: One page of suppliers.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../../shared/components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../../shared/components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            description: One page of suppliers.
+            properties:
+              page:
+                $ref: ../../shared/components/schemas/Page.yaml
+              items:
+                type: array
+                description: Suppliers in this page.
+                maxItems: 100
+                items:
+                  $ref: ../components/schemas/Supplier.yaml
+            required:
+              - page
+              - items
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../shared/components/responses/Forbidden.yaml
+    '429':
+      $ref: ../../shared/components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../shared/components/responses/InternalServerError.yaml
+
+post:
+  operationId: createSupplier
+  summary: Register a supplier
+  description: Adds a supplier that stock can be ordered from.
+  tags:
+    - Suppliers
+  security:
+    - ServiceApiKey: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/Supplier.yaml
+  responses:
+    '201':
+      description: The supplier was registered.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../../shared/components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../../shared/components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Supplier.yaml
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../shared/components/responses/Forbidden.yaml
+    '409':
+      $ref: ../../shared/components/responses/Conflict.yaml
+    '429':
+      $ref: ../../shared/components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../shared/components/responses/InternalServerError.yaml

@@ -1,0 +1,81 @@
+parameters:
+  - name: orderId
+    in: path
+    required: true
+    description: Identifier of the order.
+    schema:
+      type: string
+      format: uuid
+      maxLength: 36
+
+get:
+  operationId: getOrder
+  summary: Retrieve an order
+  description: Returns a single order with its lines and current fulfilment status.
+  tags:
+    - Orders
+  security:
+    - OAuth2:
+        - orders:read
+  responses:
+    '200':
+      description: The requested order.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../../shared/components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../../shared/components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Order.yaml
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '404':
+      $ref: ../../shared/components/responses/NotFound.yaml
+    '429':
+      $ref: ../../shared/components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../shared/components/responses/InternalServerError.yaml
+
+delete:
+  operationId: cancelOrder
+  summary: Cancel an order
+  description: |
+    Cancels an order that has not shipped yet and releases the stock it reserved.
+    Cancelling an order that already shipped returns a conflict.
+  tags:
+    - Orders
+  security:
+    - OAuth2:
+        - orders:write
+  responses:
+    '204':
+      description: The order was cancelled.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../../shared/components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../../shared/components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '404':
+      $ref: ../../shared/components/responses/NotFound.yaml
+    '409':
+      $ref: ../../shared/components/responses/Conflict.yaml
+    '429':
+      $ref: ../../shared/components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../shared/components/responses/InternalServerError.yaml

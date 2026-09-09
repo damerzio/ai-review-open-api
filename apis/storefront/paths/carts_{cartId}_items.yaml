@@ -1,0 +1,57 @@
+parameters:
+  - name: cartId
+    in: path
+    required: true
+    description: Identifier of the cart.
+    schema:
+      type: string
+      format: uuid
+      maxLength: 36
+
+put:
+  operationId: replaceCartItems
+  summary: Replace the lines of a cart
+  description: |
+    Replaces every line in the cart with the submitted list. Omitted lines are removed,
+    which makes the operation safe to retry.
+  tags:
+    - Carts
+  security:
+    - OAuth2:
+        - carts:write
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: array
+          description: The complete new set of cart lines.
+          maxItems: 50
+          items:
+            $ref: ../components/schemas/CartItem.yaml
+  responses:
+    '200':
+      description: The cart after the replacement.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../../shared/components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../../shared/components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Cart.yaml
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '404':
+      $ref: ../../shared/components/responses/NotFound.yaml
+    '429':
+      $ref: ../../shared/components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../shared/components/responses/InternalServerError.yaml

@@ -1,0 +1,54 @@
+openapi: 3.0.3
+info:
+  title: Inventory API
+  version: 2.1.0
+  description: |
+    The Inventory API is the internal warehouse system of record. It tracks how much of
+    each stock keeping unit sits in which warehouse, records adjustments made by staff,
+    and exposes the supplier catalog behind them.
+
+    The API is internal: it is reachable from the corporate network only and every
+    operation requires a service API key. It is not part of the public product.
+  contact:
+    name: Warehouse platform team
+    email: warehouse@shop.example.com
+    url: https://intranet.shop.example.com/warehouse
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+servers:
+  - url: https://inventory.internal.shop.example.com/v2
+    description: Internal production warehouse server.
+    x-internal: true
+  - url: https://inventory.staging.internal.shop.example.com/v2
+    description: Internal staging server, reset nightly.
+    x-internal: true
+security:
+  - ServiceApiKey: []
+tags:
+  - name: Stock
+    description: Read and adjust stock levels per warehouse.
+  - name: Warehouses
+    description: Inspect the warehouses stock can be held in.
+  - name: Suppliers
+    description: Suppliers that replenish stock.
+paths:
+  /stock-items:
+    $ref: paths/stock-items.yaml
+  /stock-items/{sku}:
+    $ref: paths/stock-items_{sku}.yaml
+  /stock-adjustments:
+    $ref: paths/stock-adjustments.yaml
+  /warehouses:
+    $ref: paths/warehouses.yaml
+  /suppliers:
+    $ref: paths/suppliers.yaml
+components:
+  securitySchemes:
+    ServiceApiKey:
+      type: apiKey
+      in: header
+      name: X-Service-Api-Key
+      description: |
+        Service API key issued per consuming system. Keys are rotated every 90 days and
+        are sent in a header so they never appear in a URL or an access log.

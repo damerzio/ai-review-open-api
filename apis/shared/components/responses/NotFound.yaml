@@ -1,0 +1,14 @@
+description: The requested resource does not exist.
+headers:
+  RateLimit-Limit:
+    $ref: ../headers/RateLimitLimit.yaml
+  RateLimit-Remaining:
+    $ref: ../headers/RateLimitRemaining.yaml
+  RateLimit-Reset:
+    $ref: ../headers/RateLimitReset.yaml
+  Access-Control-Allow-Origin:
+    $ref: ../headers/AccessControlAllowOrigin.yaml
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/Error.yaml

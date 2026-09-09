@@ -1,0 +1,38 @@
+type: object
+additionalProperties: false
+description: A placed order and its current fulfilment state.
+allOf:
+  - $ref: ../../../shared/components/schemas/Timestamps.yaml
+  - type: object
+    additionalProperties: false
+    properties:
+      id:
+        type: string
+        description: Identifier of the order.
+        format: uuid
+        maxLength: 36
+        readOnly: true
+      number:
+        type: string
+        description: Human-readable order number shown to the customer.
+        maxLength: 20
+        pattern: '^ORD-[0-9]{6,12}$'
+        readOnly: true
+      status:
+        type: string
+        description: Current fulfilment status of the order.
+        enum: [pending, paid, shipped, delivered, cancelled]
+      lines:
+        type: array
+        description: Lines that make up the order.
+        maxItems: 50
+        items:
+          $ref: ./OrderLine.yaml
+      shippingAddress:
+        $ref: ./Address.yaml
+      total:
+        $ref: ../../../shared/components/schemas/Money.yaml
+    required:
+      - status
+      - lines
+      - shippingAddress

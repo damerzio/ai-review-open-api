@@ -1,0 +1,12 @@
+# Redocly project configuration for the Example Shop API documentation.
+apis:
+  storefront@v1:
+    root: apis/storefront/openapi.yaml
+  inventory@v2:
+    root: apis/inventory/openapi.yaml
+
+extends:
+  - minimal
+
+openapi:
+  hideDownloadButtons: false

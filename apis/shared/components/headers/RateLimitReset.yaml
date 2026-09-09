@@ -1,0 +1,7 @@
+description: Seconds until the current rate-limit window resets.
+required: false
+schema:
+  type: integer
+  format: int32
+  minimum: 0
+  maximum: 86400

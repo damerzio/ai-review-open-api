@@ -1,0 +1,23 @@
+type: object
+additionalProperties: false
+description: Cursor pagination envelope shared by every list operation.
+properties:
+  cursor:
+    type: string
+    description: Cursor pointing at the next page. Absent on the last page.
+    maxLength: 256
+    pattern: '^[A-Za-z0-9_=-]+$'
+  limit:
+    type: integer
+    format: int32
+    description: Number of items requested for this page.
+    minimum: 1
+    maximum: 100
+  total:
+    type: integer
+    format: int64
+    description: Total number of items matching the query.
+    minimum: 0
+    maximum: 1000000000
+required:
+  - limit

@@ -1,0 +1,102 @@
+get:
+  operationId: listOrders
+  summary: List orders
+  description: |
+    Returns one page of the authenticated customer's orders, newest first. A client
+    credentials token with `orders:read` sees every order in the store instead.
+  tags:
+    - Orders
+  security:
+    - OAuth2:
+        - orders:read
+  parameters:
+    - $ref: ../../shared/components/parameters/Cursor.yaml
+    - $ref: ../../shared/components/parameters/Limit.yaml
+    - name: status
+      in: query
+      required: false
+      description: Restrict the page to a single fulfilment status.
+      schema:
+        type: string
+        enum: [pending, paid, shipped, delivered, cancelled]
+  responses:
+    '200':
+      description: One page of orders.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../../shared/components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../../shared/components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/OrderList.yaml
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '429':
+      $ref: ../../shared/components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../shared/components/responses/InternalServerError.yaml
+
+post:
+  operationId: createOrder
+  summary: Place an order
+  description: |
+    Converts a cart into an order and reserves stock for every line. The cart is closed
+    once the order exists, so a second call with the same cart returns a conflict.
+  tags:
+    - Orders
+  security:
+    - OAuth2:
+        - orders:write
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          additionalProperties: false
+          description: The cart to check out and where to deliver it.
+          properties:
+            cartId:
+              type: string
+              description: Identifier of the cart being checked out.
+              format: uuid
+              maxLength: 36
+            shippingAddress:
+              $ref: ../components/schemas/Address.yaml
+          required:
+            - cartId
+            - shippingAddress
+  responses:
+    '201':
+      description: The order was placed.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../../shared/components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../../shared/components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Order.yaml
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '409':
+      $ref: ../../shared/components/responses/Conflict.yaml
+    '429':
+      $ref: ../../shared/components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../shared/components/responses/InternalServerError.yaml

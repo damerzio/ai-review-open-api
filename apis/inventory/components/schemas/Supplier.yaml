@@ -1,0 +1,31 @@
+type: object
+additionalProperties: false
+description: A supplier that replenishes stock.
+properties:
+  id:
+    type: string
+    description: Identifier of the supplier.
+    format: uuid
+    maxLength: 36
+    readOnly: true
+  name:
+    type: string
+    description: Registered company name of the supplier.
+    maxLength: 200
+  contactEmail:
+    type: string
+    description: Mailbox used for purchase orders.
+    format: email
+    maxLength: 254
+  leadTimeDays:
+    type: integer
+    format: int32
+    description: Typical number of days between order and delivery.
+    minimum: 0
+    maximum: 365
+  notes:
+    type: string
+    description: Free-form notes kept by the purchasing team.
+required:
+  - name
+  - contactEmail

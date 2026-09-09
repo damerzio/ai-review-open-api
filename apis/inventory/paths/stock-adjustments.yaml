@@ -1,0 +1,106 @@
+get:
+  operationId: listStockAdjustments
+  summary: List stock adjustments
+  description: |
+    Returns one page of recorded adjustments, newest first. The log is append-only, so an
+    adjustment can be corrected only by recording another one.
+  tags:
+    - Stock
+  security:
+    - ServiceApiKey: []
+  parameters:
+    - $ref: ../../shared/components/parameters/Cursor.yaml
+    - $ref: ../../shared/components/parameters/Limit.yaml
+    - name: sku
+      in: query
+      required: false
+      description: Restrict the page to a single stock keeping unit.
+      schema:
+        type: string
+        maxLength: 32
+        pattern: '^[A-Z0-9-]{4,32}$'
+  responses:
+    '200':
+      description: One page of adjustments.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../../shared/components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../../shared/components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            description: One page of recorded adjustments.
+            properties:
+              page:
+                $ref: ../../shared/components/schemas/Page.yaml
+              items:
+                type: array
+                description: Adjustments in this page.
+                maxItems: 100
+                items:
+                  $ref: ../components/schemas/StockAdjustment.yaml
+            required:
+              - page
+              - items
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../shared/components/responses/Forbidden.yaml
+    '429':
+      $ref: ../../shared/components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../shared/components/responses/InternalServerError.yaml
+
+post:
+  operationId: createStockAdjustment
+  summary: Record a stock adjustment
+  description: |
+    Appends an adjustment to the log and applies its delta to the stock level. The
+    operation is rejected when it would drive the level below zero.
+  tags:
+    - Stock
+  security:
+    - ServiceApiKey: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/StockAdjustment.yaml
+  responses:
+    '201':
+      description: The adjustment was recorded.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../../shared/components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../../shared/components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/StockAdjustment.yaml
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../shared/components/responses/Forbidden.yaml
+    '409':
+      $ref: ../../shared/components/responses/Conflict.yaml
+    '429':
+      $ref: ../../shared/components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../shared/components/responses/InternalServerError.yaml

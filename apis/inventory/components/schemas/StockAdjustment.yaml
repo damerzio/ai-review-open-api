@@ -1,0 +1,46 @@
+type: object
+additionalProperties: false
+description: A recorded correction to a stock level, for example after a stock count.
+properties:
+  id:
+    type: string
+    description: Identifier of the adjustment.
+    format: uuid
+    maxLength: 36
+    readOnly: true
+  sku:
+    type: string
+    description: Stock keeping unit being adjusted.
+    maxLength: 32
+    pattern: '^[A-Z0-9-]{4,32}$'
+  warehouseCode:
+    type: string
+    description: Warehouse the adjustment applies to.
+    maxLength: 8
+    pattern: '^[A-Z]{2,8}$'
+  delta:
+    type: integer
+    format: int32
+    description: Signed number of units added or removed.
+    minimum: -100000
+    maximum: 100000
+  reason:
+    type: string
+    description: Why the adjustment was made.
+    enum: [stock_count, damage, theft, return, correction]
+  recordedBy:
+    type: string
+    description: Staff account that recorded the adjustment.
+    maxLength: 64
+    pattern: '^[a-z0-9._-]+$'
+  recordedAt:
+    type: string
+    description: Time the adjustment was recorded.
+    format: date-time
+    maxLength: 40
+    readOnly: true
+required:
+  - sku
+  - warehouseCode
+  - delta
+  - reason

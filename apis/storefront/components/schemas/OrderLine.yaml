@@ -1,0 +1,23 @@
+type: object
+additionalProperties: false
+description: A single fulfilled line of an order.
+properties:
+  sku:
+    type: string
+    description: Stock keeping unit that was ordered.
+    maxLength: 32
+    pattern: '^[A-Z0-9-]{4,32}$'
+  quantity:
+    type: integer
+    format: int32
+    description: Number of units ordered.
+    minimum: 1
+    maximum: 100
+  unitPrice:
+    $ref: ../../../shared/components/schemas/Money.yaml
+  lineTotal:
+    $ref: ../../../shared/components/schemas/Money.yaml
+required:
+  - sku
+  - quantity
+  - unitPrice

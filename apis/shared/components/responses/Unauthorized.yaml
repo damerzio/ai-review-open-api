@@ -1,0 +1,14 @@
+description: Authentication is missing or the credentials are invalid.
+headers:
+  RateLimit-Limit:
+    $ref: ../headers/RateLimitLimit.yaml
+  RateLimit-Remaining:
+    $ref: ../headers/RateLimitRemaining.yaml
+  RateLimit-Reset:
+    $ref: ../headers/RateLimitReset.yaml
+  Access-Control-Allow-Origin:
+    $ref: ../headers/AccessControlAllowOrigin.yaml
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/Error.yaml

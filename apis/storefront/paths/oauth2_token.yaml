@@ -1,0 +1,42 @@
+post:
+  operationId: createToken
+  summary: Issue an access token
+  description: |
+    Exchanges an authorization code, a refresh token or client credentials for a
+    short-lived access token.
+
+    The endpoint itself is unauthenticated, which is why it declares `security: []`. The
+    client authenticates with its own credentials inside the request, over TLS.
+  tags:
+    - Authorization
+  security: []
+  requestBody:
+    required: true
+    content:
+      application/x-www-form-urlencoded:
+        schema:
+          $ref: ../components/schemas/TokenRequest.yaml
+  responses:
+    '200':
+      description: A new access token.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../../shared/components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../../shared/components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/TokenResponse.yaml
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '429':
+      $ref: ../../shared/components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../shared/components/responses/InternalServerError.yaml

@@ -1,0 +1,53 @@
+get:
+  operationId: listStockItems
+  summary: List stock levels
+  description: |
+    Returns one page of stock levels across every warehouse. Filter by warehouse or by
+    stock keeping unit to narrow the page down.
+  tags:
+    - Stock
+  security:
+    - ServiceApiKey: []
+  parameters:
+    - $ref: ../../shared/components/parameters/Cursor.yaml
+    - $ref: ../../shared/components/parameters/Limit.yaml
+    - name: warehouseCode
+      in: query
+      required: false
+      description: Restrict the page to a single warehouse.
+      schema:
+        type: string
+        maxLength: 8
+        pattern: '^[A-Z]{2,8}$'
+    - name: belowReorderPoint
+      in: query
+      required: false
+      description: Return only stock that has fallen to or below its reorder point.
+      schema:
+        type: boolean
+  responses:
+    '200':
+      description: One page of stock levels.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../../shared/components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../../shared/components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/StockItemList.yaml
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../shared/components/responses/Forbidden.yaml
+    '429':
+      $ref: ../../shared/components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../shared/components/responses/InternalServerError.yaml

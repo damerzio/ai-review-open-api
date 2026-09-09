@@ -1,0 +1,17 @@
+type: object
+additionalProperties: false
+description: A monetary amount expressed in the minor unit of its currency.
+properties:
+  amount:
+    type: integer
+    format: int64
+    description: Amount in the minor unit of the currency, for example cents.
+    minimum: 0
+    maximum: 100000000
+  currency:
+    type: string
+    description: Alphabetic currency code.
+    enum: [USD, EUR, GBP, PLN, UAH]
+required:
+  - amount
+  - currency

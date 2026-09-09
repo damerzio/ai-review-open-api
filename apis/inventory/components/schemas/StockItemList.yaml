@@ -1,0 +1,15 @@
+type: object
+additionalProperties: false
+description: One page of stock levels.
+properties:
+  page:
+    $ref: ../../../shared/components/schemas/Page.yaml
+  items:
+    type: array
+    description: Stock levels in this page.
+    maxItems: 100
+    items:
+      $ref: ./StockItem.yaml
+required:
+  - page
+  - items

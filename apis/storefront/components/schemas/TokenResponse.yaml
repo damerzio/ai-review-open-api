@@ -1,0 +1,33 @@
+type: object
+additionalProperties: false
+description: Successful token response.
+properties:
+  access_token:
+    type: string
+    description: Access token to send in the Authorization header.
+    maxLength: 2048
+    pattern: '^[A-Za-z0-9_.-]+$'
+  token_type:
+    type: string
+    description: Type of the issued token.
+    enum: [Bearer]
+  expires_in:
+    type: integer
+    format: int32
+    description: Lifetime of the access token in seconds.
+    minimum: 60
+    maximum: 3600
+  refresh_token:
+    type: string
+    description: Refresh token, issued only for the authorization code grant.
+    maxLength: 512
+    pattern: '^[A-Za-z0-9_.-]+$'
+  scope:
+    type: string
+    description: Scopes actually granted, which may be narrower than requested.
+    maxLength: 256
+    pattern: '^[a-z:_ ]+$'
+required:
+  - access_token
+  - token_type
+  - expires_in
