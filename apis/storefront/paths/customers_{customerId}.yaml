@@ -1,0 +1,90 @@
+parameters:
+  - name: customerId
+    in: path
+    required: true
+    description: Numeric id of the customer.
+    schema:
+      type: integer
+      format: int64
+      minimum: 1
+      maximum: 9223372036854775807
+
+get:
+  operationId: getCustomer
+  summary: Get a customer profile
+  description: |
+    Returns the profile of a customer. Any authenticated customer may fetch any profile by
+    id; the account area uses this to show the author of a product review.
+  tags:
+    - Customers
+  security:
+    - OAuth2:
+        - customers:read
+  responses:
+    '200':
+      description: The customer profile.
+      headers:
+        X-Request-Id:
+          description: Correlation id of the request.
+          schema:
+            type: string
+            maxLength: 64
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Customer.yaml
+    '401':
+      description: Missing or invalid access token.
+    '404':
+      $ref: ../../shared/components/responses/NotFound.yaml
+
+patch:
+  operationId: updateCustomer
+  summary: Update the customer profile
+  description: |
+    Updates the profile of the authenticated customer. Only the fields present in the body
+    are changed.
+  tags:
+    - Customers
+  security:
+    - OAuth2:
+        - customers:write
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/CustomerUpdate.yaml
+  responses:
+    '200':
+      description: The updated profile.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../../shared/components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../../shared/components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Customer.yaml
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '429':
+      description: Too many profile updates in a short time.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+    '500':
+      description: Unexpected failure while saving the profile.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/DebugError.yaml
