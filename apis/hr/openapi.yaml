@@ -39,6 +39,10 @@ paths:
     $ref: paths/payroll-runs.yaml
   /payroll-runs/{payrollRunId}/payslips:
     $ref: paths/payroll-runs_{payrollRunId}_payslips.yaml
+  /payroll-runs/{payrollRunId}/approve:
+    $ref: paths/payroll-runs_{payrollRunId}_approve.yaml
+  /payroll-runs/{payrollRunId}/audit:
+    $ref: paths/payroll-runs_{payrollRunId}_audit.yaml
 components:
   securitySchemes:
     OAuth2:

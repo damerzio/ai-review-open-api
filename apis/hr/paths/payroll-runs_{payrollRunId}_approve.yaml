@@ -1,0 +1,64 @@
+parameters:
+  - $ref: ../components/parameters/PayrollRunId.yaml
+
+post:
+  operationId: approvePayrollRun
+  summary: Approve a payroll run
+  description: Moves a draft run to approved so it can be paid on the pay date.
+  tags:
+    - Payroll
+  security:
+    - OAuth2:
+        - payroll:read
+  parameters:
+    - name: Idempotency-Key
+      in: header
+      required: true
+      description: Unique key that makes the request safe to retry.
+      schema:
+        type: string
+        format: uuid
+        maxLength: 36
+  responses:
+    '200':
+      description: The approved run.
+      headers:
+        RateLimit-Limit:
+          $ref: ../components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/PayrollRun.yaml
+    '429':
+      description: Too many approval requests.
+      headers:
+        RateLimit-Limit:
+          $ref: ../components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Error.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../components/responses/NotFound.yaml
+    '409':
+      $ref: ../components/responses/Conflict.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml
