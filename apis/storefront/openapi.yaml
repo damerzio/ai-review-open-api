@@ -52,6 +52,8 @@ paths:
     $ref: paths/orders.yaml
   /orders/{orderId}:
     $ref: paths/orders_{orderId}.yaml
+  /wishlists:
+    $ref: paths/wishlists.yaml
   /oauth2/token:
     $ref: paths/oauth2_token.yaml
 components:
