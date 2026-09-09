@@ -36,6 +36,11 @@ properties:
     description: Identifier of the line manager.
     pattern: '^emp_[0-9A-HJKMNP-TV-Z]{26}$'
     maxLength: 30
+  nationalId:
+    type: string
+    description: National identification number.
+    maxLength: 32
+    pattern: '^[A-Z0-9-]+$'
   startDate:
     type: string
     format: date
