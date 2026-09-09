@@ -42,7 +42,7 @@ get:
 delete:
   operationId: cancelShipment
   summary: Cancel a shipment
-  description: Cancels a shipment that the carrier has not yet picked up.
+  description: Cancels a shipment. Only shipments the carrier has not collected can be cancelled.
   tags:
     - Shipments
   security:
