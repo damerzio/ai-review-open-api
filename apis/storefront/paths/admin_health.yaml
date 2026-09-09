@@ -1,0 +1,50 @@
+get:
+  operationId: getAdminHealth
+  summary: Admin console health
+  description: |
+    Liveness check for the admin console, polled by the uptime monitor. Open so the monitor
+    does not need credentials.
+  tags:
+    - Admin
+  security: []
+  responses:
+    '200':
+      description: The console is up.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../../shared/components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../../shared/components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              status:
+                type: string
+                enum:
+                  - ok
+                  - degraded
+              version:
+                type: string
+                description: Deployed build version.
+                maxLength: 64
+              databaseUrl:
+                type: string
+                description: Connection string of the primary database, to confirm which instance the console is wired to.
+                maxLength: 512
+            required:
+              - status
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '429':
+      $ref: ../../shared/components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../shared/components/responses/InternalServerError.yaml
