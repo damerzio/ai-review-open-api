@@ -1,0 +1,33 @@
+type: object
+additionalProperties: false
+description: A saved list of products a customer intends to buy later.
+properties:
+  id:
+    type: string
+    description: Identifier of the wishlist.
+    readOnly: true
+    pattern: '^wl_[A-Za-z0-9]{10,32}$'
+  name:
+    type: string
+    description: Name the customer gave the wishlist.
+  note:
+    type: string
+    description: Free-form note the customer attached to the wishlist.
+  shareSlug:
+    type: string
+    description: Slug used in the public share link for this wishlist.
+  itemSkus:
+    type: array
+    description: Stock keeping units saved in the wishlist.
+    maxItems: 100
+    items:
+      type: string
+      maxLength: 32
+      pattern: '^[A-Z0-9-]{4,32}$'
+  createdAt:
+    type: string
+    format: date-time
+    description: When the wishlist was created.
+    readOnly: true
+required:
+  - name
