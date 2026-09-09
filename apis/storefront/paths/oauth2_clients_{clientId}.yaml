@@ -1,0 +1,75 @@
+parameters:
+  - name: clientId
+    in: path
+    required: true
+    description: Identifier of the registered OAuth2 client.
+    schema:
+      type: string
+      maxLength: 64
+      pattern: '^[A-Za-z0-9_-]{8,64}$'
+
+get:
+  operationId: getOAuth2Client
+  summary: Read a client registration
+  description: |
+    Returns the current registration of an OAuth2 client.
+
+    Authenticate with the `registration_access_token` issued when the client was registered,
+    as a Bearer token in the `Authorization` header.
+  tags:
+    - Authorization
+  security: []
+  responses:
+    '200':
+      description: The current client registration.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            description: A registered OAuth2 client.
+            properties:
+              client_id:
+                type: string
+                description: Identifier issued to the client.
+                maxLength: 64
+                pattern: '^[A-Za-z0-9_-]{8,64}$'
+              client_secret:
+                type: string
+                description: |
+                  Secret issued to the client. Returned on every read so that a client can
+                  recover it without re-registering. Rotation is not supported.
+                maxLength: 128
+                pattern: '^[A-Za-z0-9_-]{16,128}$'
+              registration_access_token:
+                type: string
+                description: Token used to authenticate calls to this endpoint.
+                maxLength: 512
+                pattern: '^[A-Za-z0-9_.-]+$'
+              redirect_uris:
+                type: array
+                description: Redirect URIs registered for the client.
+                maxItems: 10
+                items:
+                  type: string
+                  format: uri
+                  maxLength: 2048
+            required:
+              - client_id
+              - client_secret
+              - registration_access_token
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '404':
+      $ref: ../../shared/components/responses/NotFound.yaml
+    '429':
+      $ref: ../../shared/components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../shared/components/responses/InternalServerError.yaml

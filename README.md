@@ -1,6 +1,6 @@
 # ai-review-open-api
 
-Test fixture repository for the AI reviewer. It holds two multi-file OpenAPI
+Test fixture repository for the Reunite AI reviewer. It holds two multi-file OpenAPI
 descriptions that share one component library, so a pull request can exercise the
 reviewer against realistic `$ref` graphs.
 
