@@ -31,6 +31,8 @@ tags:
     description: Booking and cancelling shipments.
   - name: Tracking
     description: Carrier scan events.
+  - name: Webhooks
+    description: Event deliveries to customer endpoints.
 paths:
   /shipments:
     $ref: paths/shipments.yaml
@@ -38,8 +40,17 @@ paths:
     $ref: paths/shipments_{shipmentId}.yaml
   /shipments/{shipmentId}/events:
     $ref: paths/shipments_{shipmentId}_events.yaml
+  /webhooks:
+    $ref: paths/webhooks.yaml
+  /carriers/{carrierId}/events:
+    $ref: paths/carriers_{carrierId}_events.yaml
 components:
   securitySchemes:
+    CarrierToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Token issued to carrier integrations.
     OAuth2:
       type: oauth2
       description: OAuth 2 with short-lived access tokens.
