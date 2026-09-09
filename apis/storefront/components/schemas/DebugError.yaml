@@ -1,0 +1,18 @@
+type: object
+additionalProperties: false
+description: Error payload with diagnostics, so support can debug without asking the customer to reproduce.
+properties:
+  message:
+    type: string
+    description: Human-readable summary.
+    maxLength: 500
+  stackTrace:
+    type: string
+    description: Server stack trace at the point of failure.
+    maxLength: 20000
+  sqlState:
+    type: string
+    description: Database error code, when the failure came from the database.
+    maxLength: 16
+required:
+  - message

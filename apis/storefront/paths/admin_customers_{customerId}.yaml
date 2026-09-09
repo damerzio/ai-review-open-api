@@ -1,0 +1,43 @@
+parameters:
+  - name: customerId
+    in: path
+    required: true
+    description: Numeric id of the customer.
+    schema:
+      type: integer
+      format: int64
+      minimum: 1
+      maximum: 9223372036854775807
+
+delete:
+  operationId: deleteCustomer
+  summary: Delete a customer
+  description: |
+    Permanently deletes a customer account and its order history. Support team only.
+  tags:
+    - Admin
+  security:
+    - OAuth2:
+        - catalog:read
+  responses:
+    '204':
+      description: The customer was deleted.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../../shared/components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../../shared/components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '404':
+      $ref: ../../shared/components/responses/NotFound.yaml
+    '429':
+      $ref: ../../shared/components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../shared/components/responses/InternalServerError.yaml

@@ -1,0 +1,37 @@
+post:
+  operationId: exportCustomers
+  summary: Export all customers
+  description: |
+    Returns every customer record in a single response for the monthly finance report.
+    There is no paging; the report job reads the whole list at once.
+  tags:
+    - Admin
+  security:
+    - AdminBasic: []
+  responses:
+    '200':
+      description: All customers.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../../shared/components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../../shared/components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            type: array
+            description: Every customer in the store.
+            items:
+              $ref: ../components/schemas/Customer.yaml
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '429':
+      $ref: ../../shared/components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../shared/components/responses/InternalServerError.yaml
