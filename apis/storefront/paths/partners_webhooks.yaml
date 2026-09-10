@@ -1,0 +1,50 @@
+post:
+  operationId: registerWebhook
+  summary: Register a webhook
+  description: |
+    Registers a webhook for a partner. Before saving, the platform sends a verification
+    request to the callback URL and stores whatever the partner's server answered in
+    `partnerResponseBody`, so the partner can check that their endpoint is wired up.
+  tags:
+    - Partners
+  security:
+    - PartnerKey: []
+  parameters:
+    - name: callbackUrl
+      in: query
+      required: true
+      description: URL the verification request and all future events are sent to.
+      schema:
+        type: string
+        format: uri
+        maxLength: 2048
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/WebhookSubscription.yaml
+  responses:
+    '201':
+      description: The subscription was created and verified.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../../shared/components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../../shared/components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/WebhookSubscription.yaml
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '429':
+      $ref: ../../shared/components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../../shared/components/responses/InternalServerError.yaml
