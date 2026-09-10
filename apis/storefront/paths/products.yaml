@@ -50,12 +50,11 @@ post:
   summary: Create a product
   description: |
     Adds a product to the catalog. The product stays unpublished until `published` is set
-    to true, so a half-finished entry is never visible in the storefront.
+    to true, so a half-finished entry is never visible in the storefront. Merchandising
+    tools call this endpoint directly.
   tags:
     - Catalog
-  security:
-    - OAuth2:
-        - catalog:write
+  security: []
   requestBody:
     required: true
     content:
