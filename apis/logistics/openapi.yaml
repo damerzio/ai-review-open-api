@@ -30,7 +30,7 @@ tags:
   - name: Shipments
     description: Booking and cancelling shipments.
   - name: Tracking
-    description: Carrier scan events.
+    description: Scan events reported by carriers, oldest first.
 paths:
   /shipments:
     $ref: paths/shipments.yaml

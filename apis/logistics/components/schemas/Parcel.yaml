@@ -5,30 +5,18 @@ properties:
   weightGrams:
     type: integer
     format: int32
-    description: Weight in grams.
+    description: Weight in grams, including packaging.
     minimum: 1
     maximum: 70000
-  lengthCm:
-    type: integer
-    format: int32
-    description: Length in centimetres.
-    minimum: 1
-    maximum: 300
-  widthCm:
-    type: integer
-    format: int32
-    description: Width in centimetres.
-    minimum: 1
-    maximum: 300
-  heightCm:
-    type: integer
-    format: int32
-    description: Height in centimetres.
-    minimum: 1
-    maximum: 300
+  dimensions:
+    $ref: ./Dimensions.yaml
   contents:
     type: string
     description: Customs description of the contents.
     maxLength: 200
+  reference:
+    type: string
+    description: Customer reference printed on the label.
+    maxLength: 40
 required:
   - weightGrams
