@@ -1,0 +1,71 @@
+type: object
+unevaluatedProperties: false
+description: A recurring payout from an account to an external bank account.
+properties:
+  id:
+    type: string
+    description: Identifier of the schedule.
+    readOnly: true
+    pattern: '^ps_[0-9A-HJKMNP-TV-Z]{26}$'
+    maxLength: 29
+  accountId:
+    type: string
+    description: Account the payouts are drawn from.
+    pattern: '^acct_[0-9A-HJKMNP-TV-Z]{26}$'
+    maxLength: 31
+  cadence:
+    type: string
+    description: How often the payout runs.
+    enum:
+      - daily
+      - weekly
+      - monthly
+  dayOfMonth:
+    type: integer
+    format: int32
+    description: Day of the month for monthly schedules.
+    minimum: 1
+    maximum: 28
+  maxAmount:
+    type: integer
+    format: int64
+    description: Cap per payout in minor units; the remainder stays on the account.
+  memo:
+    type: string
+    description: Text placed on the beneficiary's statement.
+  destination:
+    type: object
+    unevaluatedProperties: false
+    description: Beneficiary bank account.
+    properties:
+      iban:
+        type: string
+        description: IBAN of the beneficiary account.
+        maxLength: 34
+        pattern: '^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$'
+      accountHolderName:
+        type: string
+        description: Name on the beneficiary account.
+        maxLength: 140
+      accountHolderTaxId:
+        type: string
+        description: Tax identification number of the account holder.
+        maxLength: 32
+        pattern: '^[A-Z0-9-]+$'
+    required:
+      - iban
+      - accountHolderName
+  status:
+    type: string
+    description: Whether the schedule is running.
+    enum:
+      - active
+      - paused
+allOf:
+  - $ref: ./Timestamps.yaml
+required:
+  - id
+  - accountId
+  - cadence
+  - destination
+  - status

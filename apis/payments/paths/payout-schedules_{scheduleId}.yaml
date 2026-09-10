@@ -1,0 +1,100 @@
+parameters:
+  - $ref: ../components/parameters/ScheduleId.yaml
+
+get:
+  operationId: getPayoutSchedule
+  summary: Get a payout schedule
+  description: Returns one payout schedule.
+  tags:
+    - Payouts
+  security:
+    - OAuth2:
+        - payouts:read
+  responses:
+    '200':
+      description: The schedule.
+      headers:
+        RateLimit-Limit:
+          $ref: ../components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../components/headers/AccessControlAllowOrigin.yaml
+        ETag:
+          $ref: ../components/headers/ETag.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/PayoutSchedule.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../components/responses/NotFound.yaml
+    '429':
+      $ref: ../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml
+
+delete:
+  operationId: deletePayoutSchedule
+  summary: Delete a payout schedule
+  description: Stops the schedule. Payouts already in flight complete.
+  tags:
+    - Payouts
+  security:
+    - OAuth2:
+        - payouts:read
+  parameters:
+    - name: If-Match
+      in: header
+      required: true
+      description: Version of the schedule being deleted.
+      schema:
+        type: string
+        maxLength: 64
+        pattern: '^"[A-Za-z0-9+/=_-]+"$'
+  responses:
+    '204':
+      description: The schedule was deleted.
+      headers:
+        RateLimit-Limit:
+          $ref: ../components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../components/headers/AccessControlAllowOrigin.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../components/responses/NotFound.yaml
+    '429':
+      $ref: ../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml
+    '412':
+      description: The If-Match value does not match the current version.
+      headers:
+        RateLimit-Limit:
+          $ref: ../components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/problem+json:
+          schema:
+            $ref: ../components/schemas/ProblemDetails.yaml
