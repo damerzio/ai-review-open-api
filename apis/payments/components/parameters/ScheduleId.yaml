@@ -1,0 +1,8 @@
+name: scheduleId
+in: path
+required: true
+description: Identifier of the payout schedule.
+schema:
+  type: string
+  pattern: '^ps_[0-9A-HJKMNP-TV-Z]{26}$'
+  maxLength: 29

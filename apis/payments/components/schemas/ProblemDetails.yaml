@@ -1,0 +1,30 @@
+type: object
+unevaluatedProperties: true
+description: Problem details for HTTP APIs, with extension members.
+properties:
+  type:
+    type: string
+    format: uri
+    description: URI identifying the problem type.
+  title:
+    type: string
+    description: Short human-readable summary.
+    maxLength: 200
+  status:
+    type: integer
+    format: int32
+    description: HTTP status code.
+    minimum: 100
+    maximum: 599
+  detail:
+    type: string
+    description: Explanation specific to this occurrence.
+    maxLength: 2000
+  instance:
+    type: string
+    format: uri
+    description: URI of the specific occurrence.
+required:
+  - type
+  - title
+  - status
