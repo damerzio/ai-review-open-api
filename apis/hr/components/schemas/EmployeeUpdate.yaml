@@ -1,0 +1,33 @@
+type: object
+unevaluatedProperties: false
+description: Fields of an employee record that can be changed.
+properties:
+  preferredName:
+    type: string
+    description: Name to show instead of the given name.
+  phone:
+    type: string
+    description: Mobile phone in E.164 format.
+    maxLength: 16
+    pattern: '^\+[1-9][0-9]{6,14}$'
+  homeAddress:
+    $ref: ./Address.yaml
+  emergencyContact:
+    type: string
+    description: Name and phone of an emergency contact.
+    maxLength: 200
+  managerId:
+    type: string
+    description: Identifier of the line manager.
+    pattern: '^emp_[0-9A-HJKMNP-TV-Z]{26}$'
+    maxLength: 30
+  department:
+    type: string
+    description: Department code.
+    maxLength: 32
+    pattern: '^[A-Z0-9_-]+$'
+  payGrade:
+    type: string
+    description: Pay grade code.
+    maxLength: 8
+    pattern: '^[A-Z][0-9]{1,2}$'

@@ -2,9 +2,9 @@ parameters:
   - $ref: ../components/parameters/EmployeeId.yaml
 
 get:
-  operationId: getEmployee
-  summary: Get an employee
-  description: Returns one employee record.
+  operationId: getEmployeeBankDetails
+  summary: Get bank details
+  description: Returns the account payroll is paid into.
   tags:
     - Employees
   security:
@@ -12,7 +12,7 @@ get:
         - hr:read
   responses:
     '200':
-      description: The employee.
+      description: The bank details.
       headers:
         RateLimit-Limit:
           $ref: ../components/headers/RateLimitLimit.yaml
@@ -25,7 +25,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: ../components/schemas/Employee.yaml
+            $ref: ../components/schemas/BankDetails.yaml
     '400':
       $ref: ../components/responses/BadRequest.yaml
     '401':
@@ -39,42 +39,24 @@ get:
     '500':
       $ref: ../components/responses/InternalServerError.yaml
 
-patch:
-  operationId: updateEmployee
-  summary: Update an employee
-  description: Applies the given fields to the employee record. Omitted fields are unchanged.
+put:
+  operationId: setEmployeeBankDetails
+  summary: Set bank details
+  description: Replaces the account payroll is paid into.
   tags:
     - Employees
   security:
     - OAuth2:
-        - hr:read
-  parameters:
-    - name: If-Match
-      in: header
-      required: false
-      description: Version of the record being updated.
-      schema:
-        type: string
-        maxLength: 64
-        pattern: '^"[A-Za-z0-9+/=_-]+"$'
-    - name: Prefer
-      in: header
-      required: false
-      description: Response preference.
-      schema:
-        type: string
-        enum:
-          - return=minimal
-          - return=representation
+        - hr:write
   requestBody:
     required: true
     content:
-      application/merge-patch+json:
+      application/json:
         schema:
-          $ref: ../components/schemas/EmployeeUpdate.yaml
+          $ref: ../components/schemas/BankDetails.yaml
   responses:
     '200':
-      description: The updated employee.
+      description: The bank details.
       headers:
         RateLimit-Limit:
           $ref: ../components/headers/RateLimitLimit.yaml
@@ -87,7 +69,7 @@ patch:
       content:
         application/json:
           schema:
-            $ref: ../components/schemas/Employee.yaml
+            $ref: ../components/schemas/BankDetails.yaml
     '400':
       $ref: ../components/responses/BadRequest.yaml
     '401':
