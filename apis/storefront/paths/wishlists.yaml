@@ -1,0 +1,145 @@
+get:
+  operationId: listWishlists
+  summary: List wishlists
+  description: |
+    Returns the wishlists of the authenticated customer, newest first.
+  tags:
+    - Catalog
+  security:
+    - OAuth2:
+        - catalog:read
+  parameters:
+    - $ref: ../../shared/components/parameters/Cursor.yaml
+    - $ref: ../../shared/components/parameters/Limit.yaml
+  responses:
+    '200':
+      description: A page of wishlists.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../../shared/components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../../shared/components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            description: A page of wishlists.
+            properties:
+              object:
+                type: string
+                const: list
+              page:
+                $ref: ../../shared/components/schemas/Page.yaml
+              items:
+                type: array
+                description: The wishlists on this page.
+                items:
+                  $ref: ../components/schemas/Wishlist.yaml
+            required:
+              - object
+              - page
+              - items
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '500':
+      $ref: ../../shared/components/responses/InternalServerError.yaml
+
+post:
+  operationId: createWishlist
+  summary: Create a wishlist
+  description: |
+    Creates a wishlist for the authenticated customer and optionally seeds it with
+    products, tags and collaborators.
+  tags:
+    - Catalog
+  security:
+    - OAuth2:
+        - catalog:write
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          additionalProperties: false
+          description: The wishlist to create.
+          properties:
+            name:
+              type: string
+              description: Name of the wishlist.
+            note:
+              type: string
+              description: Free-form note shown at the top of the wishlist.
+            shareSlug:
+              type: string
+              description: Slug to use in the public share link.
+            occasion:
+              type: string
+              description: Occasion the wishlist is for, such as a birthday.
+            giftMessage:
+              type: string
+              description: Message to print on the gift card that ships with the order.
+            currency:
+              type: string
+              description: Currency the customer wants prices shown in.
+            itemSkus:
+              type: array
+              description: Stock keeping units to seed the wishlist with.
+              items:
+                type: string
+                maxLength: 32
+                pattern: '^[A-Z0-9-]{4,32}$'
+            tags:
+              type: array
+              description: Tags the customer wants to organise wishlists by.
+              items:
+                type: string
+                maxLength: 24
+            collaboratorEmails:
+              type: array
+              description: Customers allowed to edit this wishlist.
+              items:
+                type: string
+                format: email
+                maxLength: 254
+            reminderDays:
+              type: integer
+              format: int32
+              description: How many days before the occasion to send a reminder.
+            priority:
+              type: integer
+              format: int32
+              description: Sort priority of the wishlist in the customer account.
+          required:
+            - name
+  responses:
+    '201':
+      description: The wishlist was created.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../../shared/components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../../shared/components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Wishlist.yaml
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '409':
+      $ref: ../../shared/components/responses/Conflict.yaml
+    '500':
+      $ref: ../../shared/components/responses/InternalServerError.yaml
