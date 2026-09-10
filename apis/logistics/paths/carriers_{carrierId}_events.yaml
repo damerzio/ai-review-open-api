@@ -1,0 +1,49 @@
+parameters:
+  - $ref: ../components/parameters/CarrierId.yaml
+
+post:
+  operationId: ingestCarrierEvents
+  summary: Ingest carrier scan events
+  description: Receives scan events pushed by a carrier and attaches them to the matching shipments.
+  tags:
+    - Tracking
+  security: []
+  parameters:
+    - name: X-Carrier-Signature
+      in: header
+      required: true
+      description: HMAC-SHA256 of the body, hex encoded.
+      schema:
+        type: string
+        maxLength: 64
+        pattern: '^[a-f0-9]{64}$'
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: array
+          description: Events in the batch.
+          maxItems: 500
+          items:
+            $ref: ../components/schemas/CarrierEvent.yaml
+  responses:
+    '202':
+      description: The batch was accepted.
+      headers:
+        RateLimit-Limit:
+          $ref: ../components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../components/headers/AccessControlAllowOrigin.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '429':
+      $ref: ../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

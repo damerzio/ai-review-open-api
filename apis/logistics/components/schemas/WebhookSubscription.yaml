@@ -1,0 +1,41 @@
+type: object
+unevaluatedProperties: false
+description: Delivery of tracking events to a customer endpoint.
+properties:
+  id:
+    type: string
+    description: Identifier of the subscription.
+    readOnly: true
+    pattern: '^whs_[0-9A-HJKMNP-TV-Z]{26}$'
+    maxLength: 30
+  url:
+    type: string
+    format: uri
+    description: HTTPS endpoint that receives events.
+    maxLength: 2048
+  secret:
+    type: string
+    description: Shared secret used to sign deliveries.
+    maxLength: 64
+    pattern: '^[A-Za-z0-9]{32,64}$'
+  events:
+    type: array
+    description: Event types to deliver.
+    maxItems: 10
+    items:
+      type: string
+      enum:
+        - shipment.created
+        - shipment.in_transit
+        - shipment.delivered
+        - shipment.exception
+  active:
+    type: boolean
+    description: Whether deliveries are enabled.
+allOf:
+  - $ref: ./Timestamps.yaml
+required:
+  - id
+  - url
+  - events
+  - active
