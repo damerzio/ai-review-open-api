@@ -1,0 +1,20 @@
+type: object
+description: |
+  Fields a customer can change on their own profile from the account area.
+unevaluatedProperties:
+  type: string
+  maxLength: 200
+properties:
+  displayName:
+    type: string
+    description: Name shown on reviews and in the account area.
+  role:
+    type: string
+    description: Account role.
+    enum:
+      - customer
+      - support
+      - admin
+  marketingConsent:
+    type: boolean
+    description: Whether the customer opts in to marketing e-mails.
