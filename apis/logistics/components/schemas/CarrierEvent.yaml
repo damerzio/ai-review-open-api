@@ -1,0 +1,29 @@
+type: object
+unevaluatedProperties: true
+description: Scan event as sent by a carrier.
+properties:
+  trackingNumber:
+    type: string
+    description: Carrier tracking number.
+    maxLength: 40
+    pattern: '^[A-Z0-9]+$'
+  occurredAt:
+    type: string
+    format: date-time
+    description: When the scan happened.
+  code:
+    type: string
+    description: Carrier-specific event code.
+    maxLength: 16
+    pattern: '^[A-Z0-9_]+$'
+  location:
+    type: string
+    description: Facility or city.
+    maxLength: 120
+  rawPayload:
+    type: string
+    description: Original carrier message.
+required:
+  - trackingNumber
+  - occurredAt
+  - code

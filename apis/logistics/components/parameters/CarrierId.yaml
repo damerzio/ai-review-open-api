@@ -1,0 +1,11 @@
+name: carrierId
+in: path
+required: true
+description: Carrier code.
+schema:
+  type: string
+  enum:
+    - dhl
+    - ups
+    - fedex
+    - postnl
