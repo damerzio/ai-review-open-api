@@ -35,6 +35,8 @@ paths:
     $ref: paths/employees.yaml
   /employees/{employeeId}:
     $ref: paths/employees_{employeeId}.yaml
+  /employees/{employeeId}/bank-details:
+    $ref: paths/employees_{employeeId}_bank-details.yaml
   /payroll-runs:
     $ref: paths/payroll-runs.yaml
   /payroll-runs/{payrollRunId}/payslips:

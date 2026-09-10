@@ -1,0 +1,26 @@
+type: object
+unevaluatedProperties: false
+description: Postal address.
+properties:
+  line1:
+    type: string
+    description: Street address.
+    maxLength: 120
+  city:
+    type: string
+    description: City.
+    maxLength: 80
+  postalCode:
+    type: string
+    description: Postal code.
+    maxLength: 16
+  country:
+    type: string
+    description: ISO 3166-1 alpha-2 country code.
+    maxLength: 2
+    pattern: '^[A-Z]{2}$'
+required:
+  - line1
+  - city
+  - postalCode
+  - country
