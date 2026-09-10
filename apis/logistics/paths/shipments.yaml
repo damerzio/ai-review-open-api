@@ -51,7 +51,9 @@ get:
 post:
   operationId: createShipment
   summary: Create a shipment
-  description: Books a shipment with the carrier and returns the tracking number.
+  description: |
+    Books a shipment with the selected carrier. The response carries the carrier tracking
+    number; the label is available from the carrier portal within a few minutes.
   tags:
     - Shipments
   security:

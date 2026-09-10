@@ -19,7 +19,7 @@ properties:
       - postnl
   service:
     type: string
-    description: Service level.
+    description: Service level; economy is not offered by every carrier.
     enum:
       - economy
       - standard
