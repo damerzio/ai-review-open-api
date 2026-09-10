@@ -1,0 +1,80 @@
+parameters:
+  - name: productId
+    in: path
+    required: true
+    description: Identifier of the product being reviewed.
+    schema:
+      type: string
+      format: uuid
+      maxLength: 36
+
+post:
+  operationId: createProductReview
+  summary: Submit a product review
+  description: |
+    Adds a customer review to a product. Reviews are published immediately and appear on
+    the product page in the storefront, newest first.
+  tags:
+    - Catalog
+  security:
+    - OAuth2:
+        - catalog:read
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          additionalProperties: false
+          description: A review written by a customer.
+          properties:
+            rating:
+              type: integer
+              description: Star rating the customer gave the product.
+            title:
+              type: string
+              description: Short headline of the review.
+            comment:
+              type: string
+              description: Full text of the review as written by the customer.
+            photos:
+              type: array
+              description: Photo URLs uploaded with the review.
+              items:
+                type: string
+                format: uri
+          required:
+            - rating
+            - comment
+  responses:
+    '201':
+      description: The review was published.
+      headers:
+        RateLimit-Limit:
+          $ref: ../../shared/components/headers/RateLimitLimit.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../../shared/components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            description: The published review.
+            properties:
+              id:
+                type: string
+                description: Identifier of the review.
+                format: uuid
+                maxLength: 36
+              rating:
+                type: integer
+                format: int32
+                description: Star rating the customer gave the product.
+                minimum: 1
+                maximum: 5
+    '400':
+      $ref: ../../shared/components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../shared/components/responses/Unauthorized.yaml
+    '500':
+      $ref: ../../shared/components/responses/InternalServerError.yaml

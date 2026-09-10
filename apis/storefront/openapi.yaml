@@ -44,6 +44,8 @@ paths:
     $ref: paths/products.yaml
   /products/{productId}:
     $ref: paths/products_{productId}.yaml
+  /products/{productId}/reviews:
+    $ref: paths/products_{productId}_reviews.yaml
   /carts:
     $ref: paths/carts.yaml
   /carts/{cartId}/items:
