@@ -1,0 +1,55 @@
+get:
+  operationId: exportReconciliationTransfers
+  summary: Export settled transfers
+  description: Returns every transfer settled in the period, for reconciliation against bank statements.
+  tags:
+    - Reconciliation
+  security:
+    - PartnerKey: []
+    - FinanceBasic: []
+  parameters:
+    - name: from
+      in: query
+      required: true
+      description: Start of the period, inclusive.
+      schema:
+        type: string
+        format: date
+    - name: to
+      in: query
+      required: true
+      description: End of the period, inclusive.
+      schema:
+        type: string
+        format: date
+  responses:
+    '200':
+      description: Settled transfers in the period.
+      headers:
+        RateLimit-Limit:
+          $ref: ../components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../components/headers/AccessControlAllowOrigin.yaml
+        Link:
+          $ref: ../components/headers/Link.yaml
+      content:
+        application/json:
+          schema:
+            type: array
+            description: Settled transfers, oldest first.
+            items:
+              $ref: ../components/schemas/Transfer.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../components/responses/Forbidden.yaml
+    '429':
+      $ref: ../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml
