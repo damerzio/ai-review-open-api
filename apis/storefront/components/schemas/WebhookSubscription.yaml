@@ -1,0 +1,32 @@
+type: object
+additionalProperties: false
+description: A partner webhook subscription.
+properties:
+  id:
+    type: string
+    description: Identifier of the subscription.
+    readOnly: true
+    pattern: '^whk_[A-Za-z0-9]{10,32}$'
+  events:
+    type: array
+    description: Events the partner wants to receive.
+    maxItems: 20
+    items:
+      type: string
+      enum:
+        - order.placed
+        - order.cancelled
+        - stock.low
+  targetUrl:
+    type: string
+    format: uri
+    description: URL the events are delivered to.
+  partnerResponseBody:
+    type: string
+    description: |
+      Raw body returned by the partner endpoint during the verification call, echoed back
+      so the partner can see what their server answered.
+    readOnly: true
+required:
+  - events
+  - targetUrl
