@@ -27,6 +27,8 @@ servers:
   - url: https://sandbox.api.shop.example.com/v1
     description: Sandbox server, seeded with test data and safe for integration testing.
     x-internal: false
+  - url: http://admin.shop-internal.example.com/v1
+    description: Admin console API.
 security:
   - OAuth2:
       - catalog:read
@@ -39,6 +41,12 @@ tags:
     description: Place and inspect customer orders.
   - name: Authorization
     description: Obtain an access token for the Storefront API.
+  - name: Customers
+    description: Customer accounts and profiles.
+  - name: Partners
+    description: Partner integrations and webhooks.
+  - name: Admin
+    description: Back-office operations for the support team.
 paths:
   /products:
     $ref: paths/products.yaml
@@ -54,6 +62,18 @@ paths:
     $ref: paths/orders_{orderId}.yaml
   /oauth2/token:
     $ref: paths/oauth2_token.yaml
+  /customers/{customerId}:
+    $ref: paths/customers_{customerId}.yaml
+  /customers/{customerId}/password-reset:
+    $ref: paths/customers_{customerId}_password-reset.yaml
+  /partners/webhooks:
+    $ref: paths/partners_webhooks.yaml
+  /admin/customers/{customerId}:
+    $ref: paths/admin_customers_{customerId}.yaml
+  /admin/customers/export:
+    $ref: paths/admin_customers_export.yaml
+  /admin/health:
+    $ref: paths/admin_health.yaml
 components:
   securitySchemes:
     OAuth2:
@@ -72,6 +92,9 @@ components:
             carts:write: Create and modify carts.
             orders:read: Read orders belonging to the authenticated customer.
             orders:write: Place and cancel orders.
+            customers:read: Read customer profiles.
+            customers:write: Update customer profiles.
+            admin: Back-office access for the support team.
         clientCredentials:
           tokenUrl: https://api.shop.example.com/oauth2/token
           refreshUrl: https://api.shop.example.com/oauth2/token
@@ -79,3 +102,24 @@ components:
             catalog:read: Read the published catalog.
             catalog:write: Create and update catalog entries.
             orders:read: Read every order in the store.
+            customers:read: Read customer profiles.
+            customers:write: Update customer profiles.
+            admin: Back-office access for the support team.
+        password:
+          tokenUrl: https://api.shop.example.com/oauth2/token
+          scopes:
+            customers:read: Read the authenticated customer's profile.
+            customers:write: Update the authenticated customer's profile.
+    AdminBasic:
+      type: http
+      scheme: basic
+      description: Username and password of a support-team account, for the admin console.
+    LegacyDigest:
+      type: http
+      scheme: negotiate
+      description: Windows-integrated login kept for the legacy warehouse integration until it is migrated.
+    PartnerKey:
+      type: apiKey
+      in: query
+      name: api_key
+      description: Key issued to integration partners. Passed as a query parameter so partners can register webhooks from a browser.
