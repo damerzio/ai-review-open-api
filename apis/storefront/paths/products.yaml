@@ -2,8 +2,10 @@ get:
   operationId: listProducts
   summary: List products
   description: |
-    Returns one page of the published catalog, newest first. Unpublished products are
-    omitted unless the caller holds the `catalog:write` scope.
+    Returns one page of the published catalog, newest first.
+
+    Unpublished products are omitted unless the caller holds the `catalog:write` scope,
+    which lets the merchandising tool preview an entry before it goes live.
   tags:
     - Catalog
   security:

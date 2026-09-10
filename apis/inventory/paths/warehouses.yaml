@@ -2,8 +2,9 @@ get:
   operationId: listWarehouses
   summary: List warehouses
   description: |
-    Returns every warehouse, active or not. The list is small and changes rarely, so it is
-    not paginated.
+    Returns every warehouse, active or not, ordered by code.
+
+    The list is small and changes rarely, so it is not paginated. Callers may cache it.
   tags:
     - Warehouses
   security:
