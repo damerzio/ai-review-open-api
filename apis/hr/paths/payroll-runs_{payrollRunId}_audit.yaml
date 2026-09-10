@@ -1,0 +1,43 @@
+parameters:
+  - $ref: ../components/parameters/PayrollRunId.yaml
+
+get:
+  operationId: listPayrollRunAudit
+  summary: Audit trail of a payroll run
+  description: Returns every change recorded against the run, oldest first.
+  tags:
+    - Payroll
+  security:
+    - OAuth2:
+        - payroll:read
+  responses:
+    '200':
+      description: The audit trail.
+      headers:
+        RateLimit-Limit:
+          $ref: ../components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            type: array
+            description: Changes, oldest first.
+            items:
+              $ref: ../components/schemas/AuditEntry.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../components/responses/NotFound.yaml
+    '429':
+      $ref: ../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml
