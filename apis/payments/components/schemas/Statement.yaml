@@ -1,0 +1,17 @@
+type: object
+unevaluatedProperties: false
+description: A monthly statement line for a partner.
+properties:
+  period:
+    type: string
+    description: Statement period in YYYY-MM.
+    maxLength: 7
+    pattern: '^[0-9]{4}-(0[1-9]|1[0-2])$'
+  settledTotal:
+    $ref: ./Money.yaml
+  note:
+    type: string
+    description: Remark added by the finance team.
+required:
+  - period
+  - settledTotal

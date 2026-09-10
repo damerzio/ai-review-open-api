@@ -1,0 +1,4 @@
+description: Web links for related resources.
+schema:
+  type: string
+  maxLength: 2048

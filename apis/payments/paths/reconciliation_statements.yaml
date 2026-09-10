@@ -1,0 +1,35 @@
+get:
+  operationId: listReconciliationStatements
+  summary: List statements
+  description: Returns the monthly statements of the authenticated partner.
+  tags:
+    - Reconciliation
+  security:
+    - PartnerKey: []
+  responses:
+    '200':
+      description: The statements.
+      headers:
+        RateLimit-Limit:
+          $ref: ../components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            type: array
+            description: Statements, newest first.
+            items:
+              $ref: ../components/schemas/Statement.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../components/responses/Forbidden.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml
