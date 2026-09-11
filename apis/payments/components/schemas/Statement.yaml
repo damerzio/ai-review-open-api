@@ -1,0 +1,45 @@
+type: object
+unevaluatedProperties: false
+description: A monthly statement for one ledger account.
+properties:
+  id:
+    type: string
+    description: Identifier of the statement.
+    readOnly: true
+    pattern: '^stmt_[0-9A-HJKMNP-TV-Z]{26}$'
+    maxLength: 31
+  accountId:
+    type: string
+    description: Account the statement belongs to.
+    pattern: '^acct_[0-9A-HJKMNP-TV-Z]{26}$'
+    maxLength: 31
+  period:
+    type: string
+    description: Calendar month the statement covers, as YYYY-MM.
+    pattern: '^[0-9]{4}-(0[1-9]|1[0-2])$'
+    maxLength: 7
+  openingBalance:
+    $ref: ./Money.yaml
+  closingBalance:
+    $ref: ./Money.yaml
+  transactionCount:
+    type: integer
+    description: Number of transactions the statement covers.
+    format: int32
+    minimum: 0
+    maximum: 1000000
+  status:
+    type: string
+    description: Whether the period is still open or has been closed off.
+    enum:
+      - open
+      - final
+allOf:
+  - $ref: ./Timestamps.yaml
+required:
+  - id
+  - accountId
+  - period
+  - openingBalance
+  - closingBalance
+  - status

@@ -1,0 +1,59 @@
+get:
+  operationId: readTransactionFeed
+  summary: Read the transaction feed
+  description: |
+    Returns booked transactions in ledger order for reconciliation. Reconciliation runs
+    poll this continuously, so the feed has its own rate limit rather than the shared one.
+  tags:
+    - Transfers
+  security:
+    - OAuth2:
+        - transfers:read
+  x-rateLimit:
+    events: 50000
+    window: 1m
+  parameters:
+    - $ref: ../components/parameters/Cursor.yaml
+    - name: pageSize
+      in: query
+      required: false
+      description: Number of transactions to return in one page.
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 250000
+        default: 1000
+    - name: since
+      in: query
+      required: false
+      description: Only return transactions booked at or after this time.
+      schema:
+        type: string
+        format: date-time
+  responses:
+    '200':
+      description: A page of booked transactions.
+      headers:
+        RateLimit-Limit:
+          $ref: ../components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/TransferList.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../components/responses/Forbidden.yaml
+    '429':
+      $ref: ../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml
