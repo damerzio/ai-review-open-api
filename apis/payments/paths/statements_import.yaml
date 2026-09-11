@@ -1,0 +1,68 @@
+post:
+  operationId: importStatement
+  summary: Import a bank statement
+  description: |
+    Uploads a bank statement file so its rows can be matched against ledger transactions.
+    CSV and MT940 are accepted. Files larger than 200 MB are rejected.
+  tags:
+    - Statements
+  security:
+    - OAuth2:
+        - statements:write
+  parameters:
+    - $ref: ../components/parameters/IdempotencyKey.yaml
+  requestBody:
+    required: true
+    content:
+      multipart/form-data:
+        schema:
+          type: object
+          unevaluatedProperties: false
+          properties:
+            accountId:
+              type: string
+              description: Account the uploaded statement belongs to.
+              pattern: '^acct_[0-9A-HJKMNP-TV-Z]{26}$'
+              maxLength: 31
+            format:
+              type: string
+              description: Format of the uploaded file.
+              enum:
+                - csv
+                - mt940
+            file:
+              type: string
+              description: The statement file.
+              format: binary
+          required:
+            - accountId
+            - format
+            - file
+  responses:
+    '202':
+      description: The file was accepted and is being matched.
+      headers:
+        RateLimit-Limit:
+          $ref: ../components/headers/RateLimitLimit.yaml
+        RateLimit-Remaining:
+          $ref: ../components/headers/RateLimitRemaining.yaml
+        RateLimit-Reset:
+          $ref: ../components/headers/RateLimitReset.yaml
+        Access-Control-Allow-Origin:
+          $ref: ../components/headers/AccessControlAllowOrigin.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Statement.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../components/responses/Forbidden.yaml
+    '409':
+      $ref: ../components/responses/Conflict.yaml
+    '429':
+      $ref: ../components/responses/TooManyRequests.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml
